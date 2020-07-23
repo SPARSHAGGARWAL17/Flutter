@@ -25,6 +25,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final imgCrop = GlobalKey<ImgCropState>();
   File image;
+  File images;
   var pickedImage;
   final picker = ImagePicker();
   Future getImage(BuildContext context) async {
@@ -34,11 +35,16 @@ class _LandingPageState extends State<LandingPage> {
       image = File(pickedImage.path);
     });
     Navigator.of(context).pop();
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => SimpleCropRoute(
-        image: image,
+    images = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SimpleCropRoute(
+          image: image,
+        ),
       ),
-    ));
+    );
+    Scaffold.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: File(images)));
   }
 
   Future getCameraImage(BuildContext context) async {
