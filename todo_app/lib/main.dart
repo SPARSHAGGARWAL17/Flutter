@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_image_crop/simple_image_crop.dart';
+import 'package:todo_app/crop.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,9 +32,13 @@ class _LandingPageState extends State<LandingPage> {
     pickedImage = await picker.getImage(source: ImageSource.gallery);
     setState(() {
       image = File(pickedImage.path);
-      print(image.path);
     });
     Navigator.of(context).pop();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => SimpleCropRoute(
+        image: image,
+      ),
+    ));
   }
 
   Future getCameraImage(BuildContext context) async {
@@ -44,18 +49,6 @@ class _LandingPageState extends State<LandingPage> {
       print(image.path);
     });
     Navigator.of(context).pop();
-  }
-
-  Widget _buildCropImage() {
-    return Container(
-      color: Colors.black,
-      child: ImgCrop(
-        chipRadius: 150,
-        chipShape: 'Circle',
-        key: imgCrop,
-        image: FileImage(image),
-      ),
-    );
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -70,7 +63,7 @@ class _LandingPageState extends State<LandingPage> {
               children: <Widget>[
                 GestureDetector(
                   child: Text('Gallery'),
-                  onTap: () {
+                  onTap: () async {
                     getImage(context);
                   },
                 ),
@@ -79,7 +72,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 GestureDetector(
                   child: Text('Camera'),
-                  onTap: () {
+                  onTap: () async {
                     getCameraImage(context);
                   },
                 ),
