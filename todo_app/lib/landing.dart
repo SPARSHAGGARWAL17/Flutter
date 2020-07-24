@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -13,12 +15,17 @@ class _LandingPageState extends State<LandingPage> {
   final imgCrop = GlobalKey<ImgCropState>();
   File image;
   File croppedImage;
+  String name;
   var pickedImage;
   final picker = ImagePicker();
   Future getImage(BuildContext context) async {
     // ignore: deprecated_member_use
-    pickedImage = await picker.getImage(source: ImageSource.gallery);
-    croppedImage = null;
+    // croppedImage = null;
+    try {
+      pickedImage = await picker.getImage(source: ImageSource.gallery);
+    } catch (Exception) {
+      Navigator.of(context).pop();
+    }
     setState(() {
       image = File(pickedImage.path);
     });
@@ -35,6 +42,9 @@ class _LandingPageState extends State<LandingPage> {
   Future getCameraImage(BuildContext context) async {
     // ignore: deprecated_member_use
     pickedImage = await picker.getImage(source: ImageSource.camera);
+    if (pickedImage == null) {
+      Navigator.of(context).pop();
+    }
     croppedImage = null;
     setState(() {
       image = File(pickedImage.path);
@@ -61,16 +71,26 @@ class _LandingPageState extends State<LandingPage> {
             child: ListBody(
               children: <Widget>[
                 GestureDetector(
-                  child: Text('Gallery'),
+                  child: Container(
+                    child: Text(
+                      'Gallery',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                   onTap: () async {
                     getImage(context);
                   },
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 13,
                 ),
                 GestureDetector(
-                  child: Text('Camera'),
+                  child: Container(
+                    child: Text(
+                      'Camera',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                   onTap: () async {
                     getCameraImage(context);
                   },
@@ -93,17 +113,23 @@ class _LandingPageState extends State<LandingPage> {
 
   Widget imageOrText(BuildContext context) {
     if (croppedImage != null) {
-      return CircleAvatar(
-        backgroundImage: FileImage(croppedImage),
-        radius: 100,
+      return FlatButton(
+        onPressed: () {
+          _showMyDialog(context);
+        },
+        child: CircleAvatar(
+          backgroundImage: FileImage(croppedImage),
+          radius: 100,
+        ),
       );
     } else {
-      return Container(
-        width: 200,
-        height: 200,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.black,
+      return FlatButton(
+        onPressed: () {
+          _showMyDialog(context);
+        },
+        child: CircleAvatar(
+          backgroundColor: Colors.black,
+          radius: 100,
         ),
       );
     }
@@ -112,19 +138,69 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'User Details',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Container(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              // Text('hello'),
-              imageOrText(context),
-              RaisedButton(
-                onPressed: () {
-                  _showMyDialog(context);
-                },
-                child: Text('Click Here.'),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    imageOrText(context),
+                    SizedBox(height: 10),
+                    Text(
+                      'Click here to Add Picture.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
               ),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: TextField(
+                  autocorrect: true,
+                  maxLength: 30,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter Name',
+                  ),
+                  onChanged: (value) {
+                    name = value;
+                  },
+                ),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  child: Center(
+                    child: Text(
+                      'Save',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20)),
+                ),
+              )
             ],
           ),
         ),
