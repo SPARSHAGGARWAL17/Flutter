@@ -59,7 +59,7 @@ class SimpleCropRoute extends StatelessWidget {
                 final crop = cropKey.currentState;
                 var croppedFile =
                     await crop.cropCompleted(image, pictureQuality: 600);
-                Navigator.pop(context, image);
+                Navigator.pop(context, croppedFile);
               },
             )
           ],
