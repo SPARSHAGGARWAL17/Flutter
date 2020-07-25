@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:simple_image_crop/simple_image_crop.dart';
 import 'crop.dart';
 
+const String kDefaultImage = 'User.png';
+
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -23,41 +25,49 @@ class _LandingPageState extends State<LandingPage> {
     // croppedImage = null;
     try {
       pickedImage = await picker.getImage(source: ImageSource.gallery);
+      print("=============================================$pickedImage.info");
+      if (pickedImage != null) {
+        setState(() {
+          image = File(pickedImage.path);
+        });
+        Navigator.of(context).pop();
+        croppedImage = await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SimpleCropRoute(
+              image: image,
+            ),
+          ),
+        );
+        setState(() {
+          croppedImage = croppedImage;
+        });
+      }
     } catch (Exception) {
       Navigator.of(context).pop();
     }
-    setState(() {
-      image = File(pickedImage.path);
-    });
-    Navigator.of(context).pop();
-    croppedImage = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SimpleCropRoute(
-          image: image,
-        ),
-      ),
-    );
   }
 
   Future getCameraImage(BuildContext context) async {
     // ignore: deprecated_member_use
     pickedImage = await picker.getImage(source: ImageSource.camera);
-    if (pickedImage == null) {
+    if (pickedImage != null) {
+      setState(() {
+        croppedImage = null;
+        image = File(pickedImage.path);
+        print(image.path);
+      });
       Navigator.of(context).pop();
-    }
-    croppedImage = null;
-    setState(() {
-      image = File(pickedImage.path);
-      print(image.path);
-    });
-    Navigator.of(context).pop();
-    croppedImage = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SimpleCropRoute(
-          image: image,
+      croppedImage = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SimpleCropRoute(
+            image: image,
+          ),
         ),
-      ),
-    );
+      );
+      setState(() {
+        croppedImage = croppedImage;
+      });
+    }
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -113,24 +123,27 @@ class _LandingPageState extends State<LandingPage> {
 
   Widget imageOrText(BuildContext context) {
     if (croppedImage != null) {
-      return FlatButton(
-        onPressed: () {
-          _showMyDialog(context);
-        },
-        child: CircleAvatar(
-          backgroundImage: FileImage(croppedImage),
-          radius: 100,
+      return CircleAvatar(
+        child: FlatButton(
+          child: Text(''),
+          onPressed: () {
+            _showMyDialog(context);
+          },
         ),
+        backgroundImage: FileImage(croppedImage),
+        radius: 100,
       );
     } else {
-      return FlatButton(
-        onPressed: () {
-          _showMyDialog(context);
-        },
-        child: CircleAvatar(
-          backgroundColor: Colors.black,
-          radius: 100,
+      return CircleAvatar(
+        child: FlatButton(
+          child: Text(''),
+          onPressed: () {
+            _showMyDialog(context);
+          },
         ),
+        backgroundColor: Colors.black,
+        backgroundImage: AssetImage(kDefaultImage),
+        radius: 100,
       );
     }
   }
@@ -138,72 +151,125 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.transparent,
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Center(
           child: Text(
             'User Details',
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: TextStyle(color: Colors.white),
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Container(
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                image: AssetImage(
+                  'background.jpg',
+                ),
+              ),
+            ),
+          ),
+          Container(
+            child: Center(
+              child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    imageOrText(context),
-                    SizedBox(height: 10),
-                    Text(
-                      'Click here to Add Picture.',
-                      style: TextStyle(color: Colors.grey),
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          imageOrText(context),
+                          SizedBox(height: 10),
+                          Text(
+                            'Click here to Add Picture.',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '  Enter Name',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextField(
+                            autocorrect: true,
+                            maxLength: 30,
+                            autofocus: false,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white70,
+                              enabledBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  )),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  style: BorderStyle.none,
+                                  color: Colors.black,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              name = value;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        print("hello");
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 150,
+                        child: Center(
+                          child: Text(
+                            'Save',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                    )
                   ],
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  autocorrect: true,
-                  maxLength: 30,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter Name',
-                  ),
-                  onChanged: (value) {
-                    name = value;
-                  },
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 50,
-                  width: 150,
-                  child: Center(
-                    child: Text(
-                      'Save',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(20)),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

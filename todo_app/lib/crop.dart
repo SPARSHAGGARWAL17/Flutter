@@ -36,8 +36,16 @@ class SimpleCropRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text('Zoom and Crop'),
+        title: Center(
+          child: Text(
+            'Zoom and Crop',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
       body: Container(
         child: Column(
