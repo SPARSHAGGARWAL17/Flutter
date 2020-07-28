@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:timer_app/constants.dart';
-import 'package:timer_app/countdown.dart';
 
 class TimerPage extends StatefulWidget {
   @override

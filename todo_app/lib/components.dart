@@ -85,11 +85,10 @@ class _BottomState extends State<Bottom> {
       buildBottomBar(
           context, Icons.assignment_return, 'All Tasks', click[2], 3),
     ];
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: bottom,
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: bottom,
     );
   }
 }

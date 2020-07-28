@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.only(top: 15, left: 15, right: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -57,68 +57,100 @@ class _MainPageState extends State<MainPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(
+                height: 15,
+              ),
               Expanded(
                 flex: 5,
                 child: SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.only(top: 15),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(
-                              top: 10, left: 20, right: 20, bottom: 10),
-                          width: double.infinity,
-                          height: size.height * 0.2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Task Name',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: size.aspectRatio * 60,
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Text(
-                                'Description of the Task Goes here.',
-                                style: TextStyle(
-                                  color: Colors.grey[200],
-                                  fontSize: size.aspectRatio * 35,
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.01,
-                              ),
-                              Text(
-                                '9:00 AM',
-                                style: TextStyle(
-                                  color: Colors.grey[300],
-                                  fontSize: size.aspectRatio * 20,
-                                ),
-                              )
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[900],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        )
-                      ],
-                    ),
+                  child: Column(
+                    children: <Widget>[
+                      TaskList(size: size),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TaskList(size: size),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TaskList(size: size),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TaskList(size: size),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
                   ),
                 ),
               ),
               Container(
-                height: 40,
+                height: 50,
+                padding: EdgeInsets.only(top: 10),
                 width: double.infinity,
                 child: Bottom(),
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TaskList extends StatelessWidget {
+  const TaskList({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.width,
+      padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Task Name',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: size.aspectRatio * 50,
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Text(
+                'Description of the Task Goes here.',
+                style: TextStyle(
+                  color: Colors.grey[200],
+                  fontSize: size.aspectRatio * 35,
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Text(
+                '9:00 AM',
+                style: TextStyle(
+                  color: Colors.grey[300],
+                  fontSize: size.aspectRatio * 20,
+                ),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
