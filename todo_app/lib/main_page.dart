@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'const.dart';
+import 'components.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool pressed;
+    // bool pressed;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -65,14 +65,41 @@ class _MainPageState extends State<MainPage> {
                     child: Column(
                       children: <Widget>[
                         Container(
+                          padding: EdgeInsets.only(
+                              top: 10, left: 20, right: 20, bottom: 10),
                           width: double.infinity,
-                          height: 150,
-                          child: Text(
-                            'Meeting',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                          height: size.height * 0.2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Task Name',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.aspectRatio * 60,
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              Text(
+                                'Description of the Task Goes here.',
+                                style: TextStyle(
+                                  color: Colors.grey[200],
+                                  fontSize: size.aspectRatio * 35,
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              Text(
+                                '9:00 AM',
+                                style: TextStyle(
+                                  color: Colors.grey[300],
+                                  fontSize: size.aspectRatio * 20,
+                                ),
+                              )
+                            ],
                           ),
                           decoration: BoxDecoration(
                             color: Colors.grey[900],
@@ -87,67 +114,11 @@ class _MainPageState extends State<MainPage> {
               Container(
                 height: 40,
                 width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    activeOrInactive(true),
-                    activeOrInactive(false),
-                    activeOrInactive(true),
-                    activeOrInactive(false),
-                  ],
-                ),
+                child: Bottom(),
               )
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildBottomBar(IconData icon, String text, Color colors) {
-    return FlatButton(
-      onPressed: () {
-        print('hello');
-      },
-      child: Column(
-        children: <Widget>[
-          Icon(icon, color: colors),
-          Text(
-            text,
-            style: TextStyle(color: colors),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget activeOrInactive(bool val) {
-    if (val == true) {
-      return buildBottomBar(Icons.assignment, 'Today', kActiveColor);
-    } else {
-      return buildBottomBar(
-          Icons.assignment_turned_in, 'Today', kInactiveColor);
-    }
-  }
-}
-
-class TextTop extends StatelessWidget {
-  const TextTop(
-      {this.size,
-      @required this.text,
-      @required this.color,
-      @required this.val});
-  final String text;
-  final Color color;
-  final double val;
-  final Size size;
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: color,
-        fontSize: size.aspectRatio * val,
       ),
     );
   }
