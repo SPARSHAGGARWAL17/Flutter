@@ -49,45 +49,67 @@ class _MainPageState extends State<MainPage> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              Text(
-                'Task',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size.aspectRatio * 70,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Task',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: size.aspectRatio * 70,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  FlatButton(
+                    child: Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        tasks.add('Hello 2');
+                      });
+                    },
+                  ),
+                  FlatButton(
+                    child: Icon(
+                      Icons.remove,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (tasks.length != 0) {
+                          tasks.removeLast();
+                        }
+                      });
+                    },
+                  ),
+                ],
               ),
               SizedBox(
                 height: 15,
               ),
               Expanded(
                 flex: 5,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      TaskList(size: size),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TaskList(size: size),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TaskList(size: size),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TaskList(size: size),
-                      SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                  ),
+                child: ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (context, int index) {
+                    return Column(
+                      children: <Widget>[
+                        TaskList(size: size, index: index),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               Container(
-                height: 50,
-                padding: EdgeInsets.only(top: 10),
+                height: 60,
+                padding: EdgeInsets.only(top: 10, bottom: 10),
                 width: double.infinity,
                 child: Bottom(),
               )
@@ -103,52 +125,49 @@ class TaskList extends StatelessWidget {
   const TaskList({
     Key key,
     @required this.size,
+    @required this.index,
   }) : super(key: key);
-
+  final int index;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: size.width,
-      padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+      padding: EdgeInsets.only(top: 10, left: 30, right: 20, bottom: 10),
       decoration: BoxDecoration(
         color: Colors.grey[900],
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Task Name',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size.aspectRatio * 50,
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Text(
-                'Description of the Task Goes here.',
-                style: TextStyle(
-                  color: Colors.grey[200],
-                  fontSize: size.aspectRatio * 35,
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Text(
-                '9:00 AM',
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: size.aspectRatio * 20,
-                ),
-              )
-            ],
+          Text(
+            tasks[index],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: size.aspectRatio * 50,
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Text(
+            'Description of the Task Goes here.',
+            style: TextStyle(
+              color: Colors.grey[200],
+              fontSize: size.aspectRatio * 35,
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Text(
+            '9:00 AM',
+            style: TextStyle(
+              color: Colors.grey[300],
+              fontSize: size.aspectRatio * 20,
+            ),
           )
         ],
       ),

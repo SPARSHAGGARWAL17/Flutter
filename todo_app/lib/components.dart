@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'const.dart';
 
 List<String> tasks = [
-  'Hello',
+  // 'Hello',
+  // 'Kya hello hai',
 ];
 // ignore: must_be_immutable
 List<int> click = [1, 0, 0, 0];
