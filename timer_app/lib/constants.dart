@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 List<String> time = new List.filled(6, '0', growable: true);
 const Color kBackground = Color(0xFF09070B);
 const Color kActive = Color(0xFFFF0077);
-TextStyle numtext() {
+TextStyle numText() {
   return TextStyle(
     fontSize: 35,
     color: Colors.white,
@@ -41,7 +41,7 @@ class _ClockState extends State<Clock> {
                 ':' +
                 time[4] +
                 time[5],
-            style: numtext(),
+            style: numText(),
           ),
         ),
       ],
@@ -126,7 +126,7 @@ class _NumpadState extends State<Numpad> {
               FlatButton(
                 child: Text(
                   '<',
-                  style: numtext(),
+                  style: numText(),
                 ),
                 onPressed: () {
                   if (time == null) {
@@ -165,7 +165,7 @@ class _NumButtonState extends State<NumButton> {
       },
       child: Text(
         widget.number.toString(),
-        style: numtext(),
+        style: numText(),
       ),
     );
   }
