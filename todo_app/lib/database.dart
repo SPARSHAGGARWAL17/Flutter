@@ -47,10 +47,4 @@ class TodoProvider {
       },
     );
   }
-
-  Future<TodoData> insert(TodoData todoData) async {
-    List<Map> map = await db.transaction((txn) async {
-      await txn.execute("INSERT INTO TODO VALUES ()");
-    });
-  }
 }
