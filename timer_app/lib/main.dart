@@ -5,18 +5,19 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+class checker {
+  checker({this.press, this.clock});
+  final List press;
+  final Map<int, List> clock;
 
-class _MyAppState extends State<MyApp> {
-  void adds(List a, int b) {
+  void adds(int b) {
+    List a = clock[1];
     if (a[1] == 0) {
       a[0] = a[1];
       a[1] = b;
     } else if (a[0] == 0) {
-      a[0] = b;
+      a[0] = a[1];
+      a[1] = b;
     }
   }
 
@@ -25,6 +26,36 @@ class _MyAppState extends State<MyApp> {
       a[1] = a[0];
       a[0] = 0;
     }
+  }
+
+  check(List press, var clock) {
+    for (var i = 0; i < 3; i++) {
+      if (press[i] == 1) {
+        List cur = clock[i + 1];
+        print(clock[i + 1]);
+        int div = (cur[0] * 10 + cur[1]);
+        print(div);
+        if (div > 60) {
+          adds(div ~/ 60);
+          clock[i + 1] = [0, 0];
+          print(clock[i + 1]);
+        }
+      }
+    }
+  }
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checker(press: press, clock: clock);
   }
 
   @override
@@ -81,7 +112,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text("save"),
                   onPressed: () {
                     setState(() {
-                      adds(sec, 5);
+                      checker.adds(7);
                     });
                   },
                 ),
@@ -89,7 +120,11 @@ class _MyAppState extends State<MyApp> {
                   child: Text("Delete"),
                   onPressed: () {
                     setState(() {
-                      del(sec);
+                      for (var i = 0; i < press.length; i++) {
+                        if (press[i] == 1) {
+                          checker.del(clock[i + 1]);
+                        }
+                      }
                     });
                   },
                 ),
@@ -112,7 +147,7 @@ class Time extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${a[0]}${a[1]} : ',
+      '${a[0]}${a[1]}  ',
       style: TextStyle(
         fontSize: 40,
         color: press[pos - 1] == 1 ? Colors.grey : Colors.black,
