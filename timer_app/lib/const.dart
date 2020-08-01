@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:timer_count_down/timer_count_down.dart';
+
+int _start = 10;
 
 // ignore: must_be_immutable
 class Button extends StatelessWidget {
@@ -22,17 +25,28 @@ class Button extends StatelessWidget {
 }
 
 class TimerWidget extends StatelessWidget {
+  void start() {
+    Duration time = Duration(seconds: 1);
+    Timer.periodic(time, (Timer time) {
+      handle(time, _start);
+    });
+  }
+
+  void handle(Timer timer, int start) {
+    if (start < 1) {
+      timer.cancel();
+    } else {
+      start = start - 1;
+      print('Inside $start');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Countdown(
-          seconds: 3,
-          onFinished: () {
-            print('Timer is Done.');
-          },
-          build: (BuildContext context, double val) {
-            return Text(val.toString());
-          }),
-    );
+        child: Text(
+      _start.toString(),
+      style: TextStyle(fontSize: 30),
+    ));
   }
 }

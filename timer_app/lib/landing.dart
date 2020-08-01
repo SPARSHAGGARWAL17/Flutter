@@ -13,11 +13,8 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   int _initialSec = 0;
-
   int _initialMin = 0;
-
   int _initialHrs = 0;
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -57,7 +54,7 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ],
                         )
-                      : Text(''),
+                      : TimerWidget(),
                 ),
               ),
               Row(
