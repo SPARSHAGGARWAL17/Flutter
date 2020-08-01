@@ -1,23 +1,38 @@
-List<int> press = [1, 0, 0];
-List<int> sec = [0, 0];
-List<int> min = [0, 0];
-List<int> hrs = [0, 0];
-var clock = <int, List>{
-  3: hrs,
-  2: min,
-  1: sec,
-};
+import 'package:flutter/material.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
-void switcher(int pos) {
-  switch (pos) {
-    case 1:
-      press = [1, 0, 0];
-      break;
-    case 2:
-      press = [0, 1, 0];
-      break;
-    case 3:
-      press = [0, 0, 1];
-      break;
+// ignore: must_be_immutable
+class Button extends StatelessWidget {
+  final bool active;
+  Function onChanged;
+  Button({this.active, this.onChanged});
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: onChanged,
+      fillColor: Color(0xffFF0077),
+      padding: EdgeInsets.symmetric(horizontal: 45, vertical: 15),
+      shape: StadiumBorder(),
+      child: Text(
+        'START',
+        style: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+    );
+  }
+}
+
+class TimerWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Countdown(
+          seconds: 3,
+          onFinished: () {
+            print('Timer is Done.');
+          },
+          build: (BuildContext context, double val) {
+            return Text(val.toString());
+          }),
+    );
   }
 }
