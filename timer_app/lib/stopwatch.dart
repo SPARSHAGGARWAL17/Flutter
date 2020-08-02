@@ -6,18 +6,18 @@ import 'const.dart';
 import 'main.dart';
 
 // ignore: must_be_immutable
-class LandingPage extends StatefulWidget {
+class StopwatchPage extends StatefulWidget {
   @override
-  _LandingPageState createState() => _LandingPageState();
+  _StopwatchPageState createState() => _StopwatchPageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _StopwatchPageState extends State<StopwatchPage> {
   int _initialSec = 0;
   int _initialMin = 0;
   int _initialHrs = 0;
-  String hh = '';
-  String mm = '';
-  String ss = '';
+  String hh = '00';
+  String mm = '00';
+  String ss = '00';
   bool pausedButton = false;
   bool startButton = true;
   bool stopButton = false;
@@ -29,10 +29,10 @@ class _LandingPageState extends State<LandingPage> {
   Timer _timer;
 
   void start(int timeForTimer) {
-    timeForTimer = (_initialHrs * 3600 + _initialMin * 60 + _initialSec) + 1;
+    timeForTimer = (_initialHrs * 3600 + _initialMin * 60 + _initialSec);
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       setState(() {
-        if (timeForTimer < 1 || stopPressed) {
+        if (stopPressed) {
           setState(() {
             Navigator.push(
               context,
@@ -43,7 +43,7 @@ class _LandingPageState extends State<LandingPage> {
             timer.cancel();
           });
         } else {
-          timeForTimer -= 1;
+          timeForTimer += 1;
         }
         pause = timeForTimer;
 
@@ -76,53 +76,21 @@ class _LandingPageState extends State<LandingPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text(
-                  'TIMER',
+                  'STOPWATCH',
                   style: TextStyle(color: Colors.white, fontSize: 50),
                 ),
                 CircleAvatar(
                   radius: size.width * 0.46,
                   backgroundColor: Color(0xffEF8CFF),
                   child: CircleAvatar(
-                      backgroundColor: Color(0xDD09070B),
-                      radius: size.width * 0.44,
-                      child: startButton
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                BuildNumber(
-                                  text: 'HH',
-                                  initial: _initialHrs,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _initialHrs = newValue;
-                                    });
-                                  },
-                                ),
-                                BuildNumber(
-                                  text: 'MM',
-                                  initial: _initialMin,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _initialMin = newValue;
-                                    });
-                                  },
-                                ),
-                                BuildNumber(
-                                  initial: _initialSec,
-                                  text: 'SS',
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      _initialSec = newValue;
-                                    });
-                                  },
-                                ),
-                              ],
-                            )
-                          : Time(
-                              hours: hh,
-                              min: mm,
-                              sec: ss,
-                            )),
+                    backgroundColor: Color(0xff09070B),
+                    radius: size.width * 0.44,
+                    child: Time(
+                      hours: hh,
+                      min: mm,
+                      sec: ss,
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -155,7 +123,7 @@ class _LandingPageState extends State<LandingPage> {
                                 },
                     ),
                     Button(
-                      text: "STOP",
+                      text: "RESET",
                       onChanged: stopButton
                           ? () {
                               setState(() {
