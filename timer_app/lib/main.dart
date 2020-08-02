@@ -40,48 +40,49 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    page = true;
+                  });
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
                       Icons.timer,
                       size: 40,
                       color: page ? Color(0xffFF0077) : Color(0xffFDA5CE),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        page = true;
-                      });
-                    },
-                  ),
-                  Text('Timer',
-                      style: TextStyle(
-                          color: page ? Color(0xffFF0077) : Color(0xffFDA5CE))),
-                ],
+                    Text('Timer',
+                        style: TextStyle(
+                            color:
+                                page ? Color(0xffFF0077) : Color(0xffFDA5CE))),
+                  ],
+                ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    color: !page ? Color(0xffFF0077) : Color(0xffFDA5CE),
-                    icon: Icon(
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    page = false;
+                  });
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
                       Icons.history,
+                      color: !page ? Color(0xffFF0077) : Color(0xffFDA5CE),
                       size: 40,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        page = false;
-                      });
-                    },
-                  ),
-                  Text('StopWatch',
-                      style: TextStyle(
-                          color:
-                              !page ? Color(0xffFF0077) : Color(0xffFDA5CE))),
-                ],
+                    Text('StopWatch',
+                        style: TextStyle(
+                            color:
+                                !page ? Color(0xffFF0077) : Color(0xffFDA5CE))),
+                  ],
+                ),
               ),
             ],
           ),
