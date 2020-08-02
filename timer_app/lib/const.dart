@@ -1,52 +1,74 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-
-int _start = 10;
+import 'package:numberpicker/numberpicker.dart';
 
 // ignore: must_be_immutable
 class Button extends StatelessWidget {
-  final bool active;
+  final String text;
   Function onChanged;
-  Button({this.active, this.onChanged});
+  Button({this.text, this.onChanged});
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
+    Size size = MediaQuery.of(context).size;
+    return RaisedButton(
       onPressed: onChanged,
-      fillColor: Color(0xffFF0077),
-      padding: EdgeInsets.symmetric(horizontal: 45, vertical: 15),
+      disabledColor: Color(0xffFDA5CE),
+      color: Color(0xffFF0077),
       shape: StadiumBorder(),
-      child: Text(
-        'START',
-        style: TextStyle(color: Colors.white, fontSize: 20),
+      child: Container(
+        width: size.width * 0.3,
+        height: size.height * 0.07,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
       ),
     );
   }
 }
 
 class TimerWidget extends StatelessWidget {
-  void start() {
-    Duration time = Duration(seconds: 1);
-    Timer.periodic(time, (Timer time) {
-      handle(time, _start);
-    });
-  }
-
-  void handle(Timer timer, int start) {
-    if (start < 1) {
-      timer.cancel();
-    } else {
-      start = start - 1;
-      print('Inside $start');
-    }
-  }
+  final String time;
+  TimerWidget({this.time});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        color: Colors.white,
         child: Text(
-      _start.toString(),
-      style: TextStyle(fontSize: 30),
-    ));
+          time,
+          style: TextStyle(fontSize: 30, color: Colors.black),
+        ));
+  }
+}
+
+// ignore: must_be_immutable
+class BuildNumber extends StatelessWidget {
+  final String text;
+  final int initial;
+  Function onChanged;
+  BuildNumber({this.text, this.initial, this.onChanged});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          text,
+          style: TextStyle(fontSize: 25, color: Colors.white),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        NumberPicker.integer(
+          initialValue: initial,
+          minValue: 0,
+          maxValue: 59,
+          onChanged: onChanged,
+        ),
+      ],
+    );
   }
 }
