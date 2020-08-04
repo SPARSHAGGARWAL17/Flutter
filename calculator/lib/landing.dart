@@ -7,7 +7,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  var result;
   bool sign = false;
   bool displayText = true;
   bool displayResult = false;
@@ -34,9 +33,19 @@ class _LandingPageState extends State<LandingPage> {
       });
       displayResult = true;
       print(result);
+      firstNum = 0;
+      lastNum = 0;
+      display = '';
+      operate = ' ';
+      sign = false;
     } else if (op == 'AC') {
       setState(() {
         result = null;
+        firstNum = 0;
+        lastNum = 0;
+        display = '';
+        operate = ' ';
+        sign = false;
       });
     }
   }
@@ -50,8 +59,15 @@ class _LandingPageState extends State<LandingPage> {
             onPressed: () {
               setState(() {
                 checkOperator(number);
-                if (!sign) {
+                if (!sign &&
+                    number != '*' &&
+                    number != '+' &&
+                    number != '-' &&
+                    number != '/' &&
+                    number != '=' &&
+                    number != 'AC') {
                   display += number;
+                  result = null;
                   firstNum = int.parse(display);
                   print(firstNum);
                 } else if (!firstNumber &&
@@ -59,7 +75,8 @@ class _LandingPageState extends State<LandingPage> {
                     number != '+' &&
                     number != '-' &&
                     number != '/' &&
-                    number != '=') {
+                    number != '=' &&
+                    number != 'AC') {
                   displayText = true;
                   display += number;
                   lastNum = int.parse(display);
@@ -127,10 +144,8 @@ class _LandingPageState extends State<LandingPage> {
                       bottom: 10,
                       right: 5,
                       child: Text(
-                        displayText
-                            ? display
-                            : displayResult ? result.toString() : ' ',
-                        style: TextStyle(color: Colors.white),
+                        result == null ? display : result.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 50),
                       ),
                     ),
                   ],
