@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../book/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../book/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../book/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../book/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../book/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../book/libs" />
+        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../book/proguard_logs" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/chapter1/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/chapter1/build" />
+    </content>
+    <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
