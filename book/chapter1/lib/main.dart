@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   _increase() {
     setState(() {
       open = !open;
-      height = open ? 300 : 80;
+      height = open ? 400 : 80;
       if (!open) {
         _controller.reverse();
       } else {
@@ -88,8 +88,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       : () {
                           setState(() {
                             _increase();
-
-                            print(_upHeight.value);
                           });
                         },
                   child: Column(
@@ -99,34 +97,65 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         animation: _controller,
                         builder: (context, child) {
                           return Container(
-                            height: _upHeight.value,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[500],
-                              borderRadius: BorderRadius.circular(60),
+                            height: _upHeight.value * 3.9,
+                            width: _upHeight.value * 15,
+                            child: FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  _increase();
+                                });
+                              },
+                              child: child,
                             ),
-                            child: child,
                           );
                         },
-                        child: FlatButton(
-                            onPressed: () {
-                              setState(() {
-                                _increase();
-                              });
-                            },
-                            child: Container()),
+                        child: Container(
+                          height: 10,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[500],
+                            borderRadius: BorderRadius.circular(60),
+                          ),
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.all(10),
                         child: AnimatedDefaultTextStyle(
                           child: Text('Share Files'),
                           style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: height == 80 ? 20 : 30),
                           duration: Duration(milliseconds: 600),
                           curve: Curves.easeInOutExpo,
                         ),
                       ),
+                      AnimatedBuilder(
+                          animation: _controller,
+                          builder: (context, child) {
+                            return Container(
+                              height: _upHeight.value * 29,
+                              width: 280,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    buildContainer('Messages', Icons.message,
+                                        Colors.green),
+                                    SizedBox(height: 15),
+                                    buildContainer(
+                                        'Mail', Icons.mail, Colors.red),
+                                    SizedBox(height: 15),
+                                    buildContainer(
+                                        'Drive', Icons.cloud, Colors.blue[800]),
+                                    SizedBox(height: 15),
+                                    buildContainer('Save File',
+                                        Icons.insert_drive_file, Colors.grey),
+                                    SizedBox(height: 15),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
                     ],
                   ),
                 ),
@@ -136,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[800],
-                  borderRadius: BorderRadius.circular(55),
+                  borderRadius: BorderRadius.circular(30),
                 ),
               ),
             ),
@@ -144,6 +173,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Container buildContainer(String text, IconData icon, Color color) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            height: 60,
+            width: 60,
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 35,
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), color: color),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 22),
+          )
+        ],
+      ),
     );
   }
 }
