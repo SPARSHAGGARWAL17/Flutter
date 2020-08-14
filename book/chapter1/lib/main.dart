@@ -30,16 +30,42 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool showFirst = true;
-
+  bool open = false;
+  AnimationController _controller;
   double height = 80;
   double width = 100;
-
+  Animation _upHeight;
   _increase() {
     setState(() {
-      height = height == 80 ? 300 : 80;
+      open = !open;
+      height = open ? 300 : 80;
+      if (!open) {
+        _controller.reverse();
+      } else {
+        _controller.forward();
+      }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    );
+    _upHeight = Tween(begin: 0.0, end: 10.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutExpo),
+    );
+    print(_upHeight.value);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,12 +79,44 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(20.0),
               child: AnimatedContainer(
                 alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FlatButton(
-                      onPressed: _increase,
-                      child: Container(
+                child: RaisedButton(
+                  color: Colors.grey[800],
+                  elevation: 0,
+                  disabledColor: Colors.grey[800],
+                  onPressed: open
+                      ? null
+                      : () {
+                          setState(() {
+                            _increase();
+
+                            print(_upHeight.value);
+                          });
+                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, child) {
+                          return Container(
+                            height: _upHeight.value,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[500],
+                              borderRadius: BorderRadius.circular(60),
+                            ),
+                            child: child,
+                          );
+                        },
+                        child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                _increase();
+                              });
+                            },
+                            child: Container()),
+                      ),
+                      Container(
                         padding: EdgeInsets.all(10),
                         child: AnimatedDefaultTextStyle(
                           child: Text('Share Files'),
@@ -69,8 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           curve: Curves.easeInOutExpo,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 duration: Duration(milliseconds: 600),
                 curve: Curves.easeInOutExpo,
@@ -78,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[800],
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(55),
                 ),
               ),
             ),
