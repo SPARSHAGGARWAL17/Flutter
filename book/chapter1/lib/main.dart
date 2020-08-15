@@ -70,11 +70,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<FoodItem> foodList = [
+      FoodItem(quantity: 2, title: 'Banana'),
+      FoodItem(quantity: 1, title: 'Grapes'),
+      FoodItem(quantity: 3, title: 'Orange'),
+      FoodItem(quantity: 4, title: 'Apple'),
+    ];
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            PopupMenuButton(
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                ),
+                itemBuilder: (BuildContext context) {
+                  return foodList.map((FoodItem foodItem) {
+                    return PopupMenuItem<FoodItem>(
+                        child: Row(
+                      children: [
+                        Text(foodItem.title),
+                        SizedBox(width: 20),
+                        Text(foodItem.quantity.toString()),
+                      ],
+                    ));
+                  }).toList();
+                }),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: AnimatedContainer(
@@ -202,4 +225,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+class FoodItem {
+  final String title;
+  final int quantity;
+  FoodItem({this.quantity, this.title});
 }
