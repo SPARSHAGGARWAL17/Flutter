@@ -26,9 +26,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  final GlobalKey<ScaffoldState> _scaffold = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffold,
       drawer: DrawerApp(),
       bottomNavigationBar: BottomAppBar(
         color: Colors.purple[600],
@@ -54,7 +56,9 @@ class _LandingPageState extends State<LandingPage> {
             Icons.menu,
             color: Colors.white,
           ),
-          onPressed: null,
+          onPressed: () {
+            _scaffold.currentState.openDrawer();
+          },
         ),
         actions: [
           IconButton(
@@ -245,6 +249,16 @@ class DrawerApp extends StatelessWidget {
             accountName: Text('Sparsh'),
             accountEmail: Text('sparsh@gmail.com'),
           ),
+          ListTile(
+            leading: Icon(
+              Icons.home,
+              color: Colors.black,
+            ),
+            title: Text('Home'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );
