@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Orientation _orientation = MediaQuery.of(context).orientation;
     List<FoodItem> foodList = [
       FoodItem(quantity: 2, title: 'Banana'),
       FoodItem(quantity: 1, title: 'Grapes'),
@@ -125,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                             child: FlatButton(
                               onPressed: () {
                                 setState(() {
+                                  print(_orientation);
                                   _increase();
                                 });
                               },
