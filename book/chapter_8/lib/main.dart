@@ -195,10 +195,11 @@ class _GratitudePageState extends State<GratitudePage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Hero(
+              transitionOnUserGestures: true,
               tag: 'format_paint',
               child: Icon(
                 Icons.format_paint,
-                size: 120,
+                size: 220,
               ),
             ),
             Row(

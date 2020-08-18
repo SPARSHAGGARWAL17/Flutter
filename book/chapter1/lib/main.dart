@@ -82,6 +82,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            Text(
+              '$_orientation',
+              style: TextStyle(color: Colors.white),
+            ),
             PopupMenuButton(
                 icon: Icon(
                   Icons.more_vert,
