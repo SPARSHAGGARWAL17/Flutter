@@ -1,3 +1,4 @@
+import 'package:chapter_9/bookmark.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -46,15 +47,41 @@ class _LandingPageState extends State<LandingPage> {
                 color: Colors.purple,
               ),
               title: FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Flights',
-                    style:
-                        TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
-                  )),
-            )
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Flights',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.bookmark,
+                color: Colors.purple,
+              ),
+              title: FlatButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BookMark(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'BookMark',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
