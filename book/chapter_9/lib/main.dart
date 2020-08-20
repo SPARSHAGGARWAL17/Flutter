@@ -1,4 +1,5 @@
 import 'package:chapter_9/bookmark.dart';
+import 'package:chapter_9/drag.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
         canvasColor: Colors.purple[200],
@@ -41,47 +43,27 @@ class _LandingPageState extends State<LandingPage> {
                 style: Theme.of(context).textTheme.headline3,
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.flight,
-                color: Colors.purple,
-              ),
-              title: FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Flights',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.bookmark,
-                color: Colors.purple,
-              ),
-              title: FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BookMark(),
-                    ),
-                  );
-                },
-                child: Text(
-                  'BookMark',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
+            _buildListTile(context, Icons.flight, 'Flight', () {
+              Navigator.of(context).pop();
+            }),
+            _buildListTile(context, Icons.bookmark, 'BookMark', () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => BookMark()));
+            }),
+            _buildListTile(context, Icons.drag_handle, 'Gesture', () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => DragWidget()));
+            }),
+            _buildListTile(context, Icons.image, 'Image', () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => DragWidget()));
+            }),
           ],
         ),
       ),
@@ -114,6 +96,26 @@ class _LandingPageState extends State<LandingPage> {
                 );
               }
             }),
+      ),
+    );
+  }
+
+  ListTile _buildListTile(
+      BuildContext context, IconData icon, String text, Function onpressed) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Colors.purple,
+      ),
+      title: FlatButton(
+        onPressed: onpressed,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ),
     );
   }
