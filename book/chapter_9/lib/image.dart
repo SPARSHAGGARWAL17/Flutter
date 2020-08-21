@@ -40,8 +40,8 @@ class _ImageScalingState extends State<ImageScaling> {
         fit: StackFit.expand,
         children: [
           // _transformScaleAndTranslate(),
-          _positionedStatusBar(context),
           _transformMatrix4(),
+          _positionedStatusBar(context),
         ],
       ),
     );
@@ -64,7 +64,7 @@ class _ImageScalingState extends State<ImageScaling> {
       top: 0.0,
       width: MediaQuery.of(context).size.width,
       child: Container(
-        color: Colors.purple[100],
+        color: Colors.white54,
         height: 50,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -78,7 +78,7 @@ class _ImageScalingState extends State<ImageScaling> {
   }
 
   void _onScaleStart(ScaleStartDetails details) {
-    print('================================Details :$details');
+    print('================================Details :${details.focalPoint} ');
     _startLastOffset = details.focalPoint;
     _lastOffset = _currentOffset;
     _lastScale = _currentScale;
@@ -86,9 +86,10 @@ class _ImageScalingState extends State<ImageScaling> {
 
   void _onScaleUpdate(ScaleUpdateDetails details) {
     var currentScale;
-    print('ScaleDetails : $details - Scale : ${details.scale}');
+
     if (details.scale != 1.0) {
       currentScale = _lastScale * details.scale;
+
       if (currentScale <= 0.5) {
         setState(() {
           currentScale = 0.5;
@@ -97,10 +98,10 @@ class _ImageScalingState extends State<ImageScaling> {
       setState(() {
         _currentScale = currentScale;
       });
-      print('Scale : $_currentScale - lastScale : $_lastScale');
     } else if (details.scale == 1.0) {
       Offset offsetAdjustedForScale =
           (_startLastOffset - _lastOffset) / _lastScale;
+
       Offset currentOffset =
           details.focalPoint - (offsetAdjustedForScale * _currentScale);
       setState(() {
@@ -147,6 +148,7 @@ class _ImageScalingState extends State<ImageScaling> {
   Offset _currentOffset = Offset.zero;
   double _lastScale = 1.0;
   double _currentScale = 1.0;
+
   @override
   Widget build(BuildContext context) {
     return _buildBody(context);

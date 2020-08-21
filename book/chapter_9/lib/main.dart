@@ -1,4 +1,5 @@
 import 'package:chapter_9/bookmark.dart';
+import 'package:chapter_9/dismissable.dart';
 import 'package:chapter_9/drag.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +70,14 @@ class _LandingPageState extends State<LandingPage> {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => ImageWidget(),
+                ),
+              );
+            }),
+            _buildListTile(context, Icons.history, 'History', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => DismissWidget(),
                 ),
               );
             }),
