@@ -2,6 +2,8 @@ import 'package:chapter_9/bookmark.dart';
 import 'package:chapter_9/drag.dart';
 import 'package:flutter/material.dart';
 
+import 'image.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -48,21 +50,27 @@ class _LandingPageState extends State<LandingPage> {
             }),
             _buildListTile(context, Icons.bookmark, 'BookMark', () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => BookMark()));
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => BookMark(),
+                ),
+              );
             }),
             _buildListTile(context, Icons.drag_handle, 'Gesture', () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => DragWidget()));
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => DragWidget(),
+                ),
+              );
             }),
             _buildListTile(context, Icons.image, 'Image', () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => DragWidget()));
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => ImageWidget(),
+                ),
+              );
             }),
           ],
         ),
@@ -70,32 +78,34 @@ class _LandingPageState extends State<LandingPage> {
       appBar: AppBar(
         title: Text('Travel'),
         leading: IconButton(
-            onPressed: () {
-              _scaffold.currentState.openDrawer();
-            },
-            icon: Icon(
-              Icons.menu,
-              color: Colors.white,
-            )),
+          onPressed: () {
+            _scaffold.currentState.openDrawer();
+          },
+          icon: Icon(
+            Icons.menu,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: SafeArea(
         child: ListView.builder(
-            itemCount: 20,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return HeaderWidget(
-                  index: index,
-                );
-              } else if (index > 0 && index <= 3) {
-                return RowCard(
-                  index: index,
-                );
-              } else {
-                return RowWidget(
-                  index: index,
-                );
-              }
-            }),
+          itemCount: 20,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return HeaderWidget(
+                index: index,
+              );
+            } else if (index > 0 && index <= 3) {
+              return RowCard(
+                index: index,
+              );
+            } else {
+              return RowWidget(
+                index: index,
+              );
+            }
+          },
+        ),
       ),
     );
   }
