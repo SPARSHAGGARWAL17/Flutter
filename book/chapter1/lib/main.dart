@@ -160,31 +160,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         ),
                       ),
                       AnimatedBuilder(
-                          animation: _controller,
-                          builder: (context, child) {
-                            return Container(
-                              height: _upHeight.value * 29,
-                              width: 280,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    buildContainer('Messages', Icons.message,
-                                        Colors.green),
-                                    SizedBox(height: 15),
-                                    buildContainer(
-                                        'Mail', Icons.mail, Colors.red),
-                                    SizedBox(height: 15),
-                                    buildContainer(
-                                        'Drive', Icons.cloud, Colors.blue[800]),
-                                    SizedBox(height: 15),
-                                    buildContainer('Save File',
-                                        Icons.insert_drive_file, Colors.grey),
-                                    SizedBox(height: 15),
-                                  ],
-                                ),
+                        animation: _controller,
+                        builder: (context, child) {
+                          return Container(
+                            height: _upHeight.value * 29,
+                            width: 280,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  buildContainer(
+                                      'Messages', Icons.message, Colors.green),
+                                  SizedBox(height: 15),
+                                  buildContainer(
+                                      'Mail', Icons.mail, Colors.red),
+                                  SizedBox(height: 15),
+                                  buildContainer(
+                                      'Drive', Icons.cloud, Colors.blue[800]),
+                                  SizedBox(height: 15),
+                                  buildContainer('Save File',
+                                      Icons.insert_drive_file, Colors.grey),
+                                  SizedBox(height: 15),
+                                ],
                               ),
-                            );
-                          })
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
