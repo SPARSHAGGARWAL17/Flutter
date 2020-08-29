@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class Database {
   List<Journal> journal;
@@ -41,12 +42,11 @@ void main() {
     Journal(age: 15, name: "Alan4"),
     Journal(age: 16, name: "Alan5"),
   ];
-  List<Journal> journal2 = [
-    Journal(age: 17, name: "Alan"),
-    Journal(age: 18, name: "Alan2"),
-    Journal(age: 19, name: "Alan3"),
-    Journal(age: 20, name: "Alan4"),
-    Journal(age: 21, name: "Alan5"),
+  List<DateTime> dateList = [
+    DateTime(2019, 12, 1),
+    DateTime(2009, 1, 13),
+    DateTime(2019, 2, 16),
+    DateTime(2010, 8, 3)
   ];
   Database db = Database(journal: journal);
   // Database db2 = Database(journal: journal2);
@@ -64,5 +64,18 @@ void main() {
 
   String json = databaseToJson(db);
   // print(json);
-  print(jsonDecode(json)["journals"]);
+  var json2 = jsonDecode(json);
+  json2["journals"][0]['name'] = "Sparsh";
+  // print(json2);
+  var date = DateTime(2012, 12, 01);
+  print(date);
+
+  for (var i in dateList) {
+    print(i.toIso8601String());
+  }
+  dateList.sort();
+  print("sorted list");
+  for (var i in dateList) {
+    print(i);
+  }
 }
