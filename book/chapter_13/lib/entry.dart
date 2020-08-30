@@ -51,7 +51,7 @@ class _EntryState extends State<Entry> {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            width: 500,
+            width: 300,
             child: FlatButton(
               onPressed: () async {
                 _pickedDate = await _selectDate(currentDate);
@@ -122,7 +122,11 @@ class _EntryState extends State<Entry> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    FlatButton(onPressed: () {}, child: Text('Cancel')),
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel')),
                     RaisedButton(
                       onPressed: () {},
                       child: Text('Save'),

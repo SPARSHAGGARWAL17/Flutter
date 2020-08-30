@@ -77,29 +77,40 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        color: Colors.grey[800],
-        height: 50,
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Padding(padding: EdgeInsets.all(30)),
+        color: Colors.grey[500],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => EntryPage(),
+            ),
+          );
+        },
       ),
       appBar: AppBar(
         centerTitle: true,
         title: Text('Journal App'),
       ),
       body: SafeArea(
-          child: FutureBuilder(
-              initialData: [],
-              future: _loadJournal(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return !snapshot.hasData
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : buildListSeparated(snapshot);
-              })),
+        child: FutureBuilder(
+          initialData: [],
+          future: _loadJournal(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return !snapshot.hasData
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : buildListSeparated(snapshot);
+          },
+        ),
+      ),
     );
   }
 }
