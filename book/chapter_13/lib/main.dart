@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         canvasColor: Colors.grey[200],
       ),
       theme: ThemeData.dark(),
-      home: LandingPage(),
+      home: EntryPage(),
     );
   }
 }
