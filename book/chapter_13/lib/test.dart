@@ -1,5 +1,48 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
+class DatabaseFileRoutines {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/local_file.json');
+  }
+
+  Future<String> readJournals() async {
+    try {
+      final file = await _localFile;
+      if (!file.existsSync()) {
+        print('File does not exists : ${file.absolute}');
+        await writeJournals('{"journals" : []}');
+      }
+      String contents = await file.readAsString();
+      return contents;
+    } catch (e) {
+      print("error journals : $e");
+      return "";
+    }
+  }
+
+  Future<File> writeJournals(String json) async {
+    final File file = await _localFile;
+    return file.writeAsString('$json');
+  }
+
+  Database databaseFromJson(String str) {
+    final dataFromJson = jsonDecode(str);
+    return Database.fromJson(dataFromJson);
+  }
+
+  String databaseToJson(Database data) {
+    final dataToJson = data.toJson();
+    return jsonEncode(dataToJson);
+  }
+}
 
 class Database {
   List<Journal> journal;
@@ -57,6 +100,16 @@ void main() {
   //   print(db3.journal[i].age);
   // }
   // print(json);
+  DatabaseFileRoutines dbFile;
+  Database _db;
+  Future<List<Journal>> _journalList() async {
+    await dbFile.readJournals().then((journalJson) {
+      _db = dbFile.databaseFromJson(journalJson);
+      _db.journal.sort((comp1, comp2) => comp2.age.compareTo(comp1.age));
+    });
+    return _db.journal;
+  }
+
   String databaseToJson(Database data) {
     var dataToJson = data.toJson();
     return jsonEncode(dataToJson);
@@ -65,17 +118,6 @@ void main() {
   String json = databaseToJson(db);
   // print(json);
   var json2 = jsonDecode(json);
-  json2["journals"][0]['name'] = "Sparsh";
-  // print(json2);
-  var date = DateTime(2012, 12, 01);
-  print(date);
-
-  for (var i in dateList) {
-    print(i.toIso8601String());
-  }
-  dateList.sort();
-  print("sorted list");
-  for (var i in dateList) {
-    print(i);
-  }
+  json2["journals"][0]['name'] = "S";
+  print(json2);
 }
