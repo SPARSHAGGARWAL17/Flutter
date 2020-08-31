@@ -2,32 +2,74 @@ import 'package:flutter/material.dart';
 import 'export.dart';
 
 class EntryPage extends StatelessWidget {
+  final bool add;
+  final JournalEdit journal;
+  final int index;
+  EntryPage({this.add, this.index, this.journal});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Entry(),
+      appBar: AppBar(
+        title: Text(add ? "Add Journal" : "Editing Page"),
+      ),
+      body: Entry(
+        add: add,
+        journalEdit: journal,
+        index: index,
+      ),
     );
   }
 }
 
 class Entry extends StatefulWidget {
+  final bool add;
+  final JournalEdit journalEdit;
+  final int index;
+  Entry({this.add, this.index, this.journalEdit});
   @override
   _EntryState createState() => _EntryState();
 }
 
 class _EntryState extends State<Entry> {
+  JournalEdit _journalEdit;
   TextEditingController _moodController = TextEditingController();
   TextEditingController _noteController = TextEditingController();
   DateTime currentDate;
   @override
   void initState() {
-    currentDate = DateTime.now();
-
     super.initState();
+    _journalEdit = JournalEdit(
+      action: 'Cancel',
+      journal: widget.journalEdit.journal,
+    );
+    if (widget.add) {
+      currentDate = DateTime.now();
+      _moodController.text = '';
+      _noteController.text = '';
+    } else {
+      currentDate = DateTime.parse(_journalEdit.journal.date);
+      _moodController.text = _journalEdit.journal.mood;
+      _noteController.text = _journalEdit.journal.note;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    void write() {
+      Journal _journal = Journal(
+        date: currentDate.toString(),
+        note: _noteController.text,
+        mood: _moodController.text,
+        id: Random().nextInt(99999).toString(),
+      );
+      if (_noteController.text == "") {
+        Navigator.pop(context);
+      } else {
+        _journalEdit.journal = _journal;
+        Navigator.pop(context, _journalEdit);
+      }
+    }
+
     Future<DateTime> _selectDate(DateTime selectedDate) async {
       DateTime _initialDate = selectedDate;
       final DateTime _pickedDate = await showDatePicker(
@@ -84,13 +126,14 @@ class _EntryState extends State<Entry> {
                 TextField(
                   controller: _moodController,
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     icon: Icon(Icons.mood),
                     enabledBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     hintText: 'Mood',
-                    fillColor: Colors.grey[400],
+                    fillColor: Colors.purple[100],
                     filled: true,
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -103,13 +146,17 @@ class _EntryState extends State<Entry> {
                 TextField(
                   controller: _noteController,
                   autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  onEditingComplete: () {
+                    print(_noteController.text);
+                  },
                   decoration: InputDecoration(
                     icon: Icon(Icons.note),
                     enabledBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     hintText: 'Note',
-                    fillColor: Colors.grey[400],
+                    fillColor: Colors.purple[100],
                     filled: true,
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -124,11 +171,14 @@ class _EntryState extends State<Entry> {
                   children: [
                     FlatButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(context, _journalEdit);
                         },
                         child: Text('Cancel')),
                     RaisedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _journalEdit.action = "Save";
+                        write();
+                      },
                       child: Text('Save'),
                     ),
                   ],

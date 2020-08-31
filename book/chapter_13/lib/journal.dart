@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'export.dart';
+import 'dart:async';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -7,30 +8,26 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  String _journal;
   DatabaseFileRoutines dbFileRoutine = DatabaseFileRoutines();
-  Database _database;
+  Database _database = Database(journal: []);
   Future<List<Journal>> _loadJournal() async {
-    await dbFileRoutine.readJournals().then((journalJson) {
+    dbFileRoutine.readJournals().then((journalJson) {
       _database = dbFileRoutine.databaseFromJson(journalJson);
-      _database.journal
-          .sort((comp1, comp2) => comp2.date.compareTo(comp1.date));
-      return _database.journal;
+      _database.journal.sort();
     });
+    return _database.journal;
   }
 
   Widget buildListSeparated(AsyncSnapshot snapshot) {
     return ListView.separated(
         itemBuilder: (BuildContext context, int index) {
-          String _title = DateFormat.yMMMEd()
-              .format(DateTime.parse(snapshot.data[index].date));
           String _subtitle =
               snapshot.data[index].mood + "\n" + snapshot.data[index].note;
           return Dismissible(
-            key: snapshot.data[index].id,
+            key: Key(snapshot.data[index].id),
             background: Container(
               color: Colors.red,
-              alignment: Alignment.centerRight,
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: 16),
               child: Icon(
                 Icons.delete,
@@ -40,29 +37,43 @@ class _LandingPageState extends State<LandingPage> {
             secondaryBackground: Container(
               color: Colors.red,
               alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(left: 16),
+              padding: EdgeInsets.only(right: 16),
               child: Icon(
                 Icons.delete,
                 color: Colors.white,
               ),
             ),
-            child: ListTile(
-              title: Column(
-                children: [
-                  Text(DateFormat.d()
-                      .format(DateTime.parse(snapshot.data[index].date))),
-                  Text(DateFormat.E()
-                      .format(DateTime.parse(snapshot.data[index].date))),
-                ],
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: ListTile(
+                leading: Column(
+                  children: [
+                    Text(
+                      DateFormat.d()
+                          .format(DateTime.parse(snapshot.data[index].date)),
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(DateFormat.E()
+                        .format(DateTime.parse(snapshot.data[index].date))),
+                  ],
+                ),
+                title: Text(
+                  DateFormat.yMMMEd()
+                      .format(DateTime.parse(snapshot.data[index].date)),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(_subtitle),
               ),
-              subtitle: Text(_subtitle),
             ),
             onDismissed: (direction) {
               setState(() {
                 _database.journal.removeAt(index);
+                DatabaseFileRoutines()
+                    .writeJournals(dbFileRoutine.databaseToJson(_database));
               });
-              DatabaseFileRoutines()
-                  .writeJournals(dbFileRoutine.databaseToJson(_database));
             },
           );
         },
@@ -76,22 +87,55 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    void _addOrEditJournal(bool add, int index, Journal journal) async {
+      JournalEdit _journalEdit = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => EntryPage(
+            add: true,
+            index: index,
+            journal: JournalEdit(),
+          ),
+        ),
+      );
+      if (_journalEdit != null) {
+        switch (_journalEdit.action) {
+          case "Save":
+            {
+              if (add) {
+                setState(() {
+                  _database.journal.add(_journalEdit.journal);
+                });
+              } else {
+                setState(() {
+                  _database.journal[index] = _journalEdit.journal;
+                });
+              }
+              DatabaseFileRoutines().writeJournals(
+                dbFileRoutine.databaseToJson(_database),
+              );
+              break;
+            }
+          case "Cancel":
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Padding(padding: EdgeInsets.all(30)),
-        color: Colors.grey[500],
+        color: Colors.purple[500],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => EntryPage(),
-            ),
-          );
+          // dbFileRoutine.readJournals();
+          _addOrEditJournal(true, -1, Journal());
         },
       ),
       appBar: AppBar(

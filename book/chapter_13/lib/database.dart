@@ -18,8 +18,12 @@ class DatabaseFileRoutines {
         print('File does not exists : ${file.absolute}');
         await writeJournals('{"journals" : []}');
       }
-      String contents = await file.readAsString();
-      return contents;
+      if (file.readAsString() != null) {
+        String contents = await file.readAsString();
+        return contents;
+      } else {
+        return "";
+      }
     } catch (e) {
       print("error journals : $e");
       return "";
@@ -32,13 +36,13 @@ class DatabaseFileRoutines {
   }
 
   Database databaseFromJson(String str) {
-    final dataFromJson = jsonDecode(str);
+    final dataFromJson = json.decode(str);
     return Database.fromJson(dataFromJson);
   }
 
   String databaseToJson(Database data) {
     final dataToJson = data.toJson();
-    return jsonEncode(dataToJson);
+    return json.encode(dataToJson);
   }
 }
 
@@ -83,4 +87,10 @@ class Journal {
         "mood": mood,
         "note": note,
       };
+}
+
+class JournalEdit {
+  Journal journal;
+  String action;
+  JournalEdit({this.action, this.journal});
 }

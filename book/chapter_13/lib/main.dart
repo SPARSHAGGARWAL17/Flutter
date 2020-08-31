@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       darkTheme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.deepOrange,
         canvasColor: Colors.grey[200],
       ),
       theme: ThemeData.dark(),
