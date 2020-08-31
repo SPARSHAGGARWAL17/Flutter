@@ -32,6 +32,8 @@ class Entry extends StatefulWidget {
 
 class _EntryState extends State<Entry> {
   JournalEdit _journalEdit;
+  FocusNode _moodFocus = FocusNode();
+  FocusNode _noteFocus = FocusNode();
   TextEditingController _moodController = TextEditingController();
   TextEditingController _noteController = TextEditingController();
   DateTime currentDate;
@@ -126,15 +128,22 @@ class _EntryState extends State<Entry> {
                 TextField(
                   controller: _moodController,
                   autofocus: true,
+                  enableInteractiveSelection: true,
+                  focusNode: _moodFocus,
+                  textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
+                  onSubmitted: (submitted) {
+                    FocusScope.of(context).requestFocus(_noteFocus);
+                  },
                   decoration: InputDecoration(
                     icon: Icon(Icons.mood),
                     enabledBorder: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     hintText: 'Mood',
-                    fillColor: Colors.purple[100],
+                    // fillColor: Colors.purple[100],
                     filled: true,
+
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -147,6 +156,8 @@ class _EntryState extends State<Entry> {
                   controller: _noteController,
                   autofocus: true,
                   textInputAction: TextInputAction.done,
+                  enableInteractiveSelection: true,
+                  textCapitalization: TextCapitalization.sentences,
                   onEditingComplete: () {
                     print(_noteController.text);
                   },
@@ -156,7 +167,7 @@ class _EntryState extends State<Entry> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     hintText: 'Note',
-                    fillColor: Colors.purple[100],
+                    // fillColor: Colors.purple[100],
                     filled: true,
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -176,8 +187,15 @@ class _EntryState extends State<Entry> {
                         child: Text('Cancel')),
                     RaisedButton(
                       onPressed: () {
-                        _journalEdit.action = "Save";
-                        write();
+                        if (_moodController.text == "") {
+                          setState(() {
+                            _journalEdit.action = "Cancel";
+                            Navigator.pop(context, _journalEdit);
+                          });
+                        } else {
+                          _journalEdit.action = "Save";
+                          write();
+                        }
                       },
                       child: Text('Save'),
                     ),
