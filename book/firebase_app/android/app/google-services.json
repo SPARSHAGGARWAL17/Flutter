@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "40455595284",
+    "firebase_url": "https://jounral-40d22.firebaseio.com",
+    "project_id": "jounral-40d22",
+    "storage_bucket": "jounral-40d22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40455595284:android:ae05a9f42d759202fb0e01",
+        "android_client_info": {
+          "package_name": "com.example.firebase_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40455595284-7bpdjqohfdtpe77amghtjs4pdsbl2p0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3grrji2eF-BaY8EwVbdqcjljBhbovyKw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40455595284-7bpdjqohfdtpe77amghtjs4pdsbl2p0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
