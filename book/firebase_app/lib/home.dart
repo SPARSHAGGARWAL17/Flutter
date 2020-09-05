@@ -56,7 +56,9 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          print('Floating pressed.');
+        },
         backgroundColor: Colors.lightGreen[300],
         child: Icon(Icons.add),
       ),
