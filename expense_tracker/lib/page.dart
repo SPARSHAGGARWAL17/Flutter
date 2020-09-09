@@ -7,105 +7,113 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<Color> _color;
-  Animation<double> _icon;
-  bool open = false;
-
+class _MainPageState extends State<MainPage> {
   GlobalKey<ScaffoldState> _scaffold = GlobalKey();
+  DateTime initialDate;
   @override
   void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400))
-          ..addListener(() {
-            setState(() {});
-          });
-    _icon = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-    _color = ColorTween(begin: Colors.green, end: Colors.red)
-        .animate(CurvedAnimation(
-      curve: Curves.easeInOutExpo,
-      parent: _controller,
-    ));
+    initialDate = DateTime.now();
+    noteController.text = "";
+    amountController.text = "";
     super.initState();
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    bottomSheet(BuildContext context) async {
-      _scaffold.currentState.showBottomSheet<void>((BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(30),
-          child: Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.grey[700],
-                    filled: true,
-                    helperText: "Note",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.grey[700],
-                    filled: true,
-                    helperText: "Amount",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          height: 300,
-          width: double.infinity,
-          margin: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 10, spreadRadius: 8, color: Colors.grey[700]),
-            ],
-            color: Theme.of(context).cardColor,
-          ),
-        );
+    _datePicker() async {
+      DateTime _pickedDate = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime.now().subtract(Duration(days: 365)),
+        lastDate: DateTime.now().add(
+          Duration(days: 365),
+        ),
+      );
+      setState(() {
+        if (_pickedDate != null) {
+          print(_pickedDate);
+          initialDate = _pickedDate;
+          _scaffold.currentState
+              .showSnackBar(SnackBar(content: Text("Contact Saved")));
+        } else if (_pickedDate == null) {
+          Navigator.of(context).pop();
+        }
       });
     }
 
-    void _animate(context) {
-      if (!open) {
-        _controller.forward();
-        bottomSheet(context);
-      } else {
-        _controller.reverse();
-        Navigator.of(context).pop();
-      }
-      open = !open;
+    bottomSheet(BuildContext context) {
+      return showModalBottomSheet(
+        isScrollControlled: true,
+        enableDrag: false,
+        context: context,
+        backgroundColor: Color.fromRGBO(0, 0, 0, 0),
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Enter Details",
+                          style: Theme.of(context).textTheme.headline5),
+                      Row(
+                        children: [
+                          Text(DateFormat.yMMMEd()
+                              .format(DateTime.parse("$initialDate"))),
+                          IconButton(
+                            icon: Icon(Icons.calendar_today),
+                            onPressed: () {
+                              _datePicker();
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  TextFormSheet(
+                    "Note",
+                  ),
+                  TextFormSheet(
+                    "Amount",
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ButtonSheet("Cancel"),
+                      ButtonSheet("Save"),
+                    ],
+                  )
+                ],
+              ),
+              height: 300,
+              width: double.infinity,
+              margin: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 10, spreadRadius: 8, color: Colors.grey[700]),
+                ],
+                color: Theme.of(context).cardColor,
+              ),
+            ),
+          );
+        },
+      );
     }
 
     return Scaffold(
       key: _scaffold,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: _color.value,
         onPressed: () {
-          _animate(context);
+          print(noteController.text);
+          bottomSheet(context);
         },
-        child: Transform.rotate(
-          angle: 0.75 * _icon.value,
-          child: Icon(Icons.add),
-        ),
+        child: Icon(Icons.add),
       ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -116,76 +124,12 @@ class _MainPageState extends State<MainPage>
             padding: EdgeInsets.all(10),
             icon: Icon(Icons.add),
             onPressed: () {
-              _animate(context);
+              bottomSheet(context);
             },
           )
         ],
       ),
       body: TrackerPage(),
     );
-  }
-}
-
-// ignore: must_be_immutable
-class FAButton extends StatefulWidget {
-  bool open;
-  FAButton({this.open});
-  @override
-  _FAButtonState createState() => _FAButtonState();
-}
-
-class _FAButtonState extends State<FAButton>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<Color> _color;
-  Animation<double> _animationIcon;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300))
-          ..addListener(() {
-            setState(() {});
-          });
-    _animationIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
-    _color = ColorTween(end: Colors.red).animate(CurvedAnimation(
-      curve: Curves.easeInOutExpo,
-      parent: _controller,
-    ));
-    super.initState();
-  }
-
-  animate() {
-    if (!widget.open) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-    widget.open = !widget.open;
-  }
-
-  Widget toggle() {
-    return FloatingActionButton(
-        onPressed: () {
-          animate();
-        },
-        backgroundColor: _color.value,
-        child: Transform.rotate(
-          angle: 0.75 * _animationIcon.value,
-          child: Icon(
-            Icons.add,
-          ),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return toggle();
   }
 }
