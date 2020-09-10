@@ -76,8 +76,9 @@ class _NewTransactionState extends State<NewTransaction> {
         SizedBox(height: 20),
         TextField(
           controller: titleController,
+          autofocus: true,
           decoration: InputDecoration(
-              labelText: "Note",
+              labelText: "Title",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
           onSubmitted: (value) {},
@@ -87,7 +88,7 @@ class _NewTransactionState extends State<NewTransaction> {
           controller: amountController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-              labelText: "Note",
+              labelText: "Amount",
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
           onSubmitted: (value) {},
@@ -134,8 +135,8 @@ class TransactionList extends StatelessWidget {
   TransactionList({this.transaction, this.delete});
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
+    return Container(
+      height: 300,
       child: ListView.builder(
         itemCount: transaction.length,
         itemBuilder: (context, int index) {
@@ -146,17 +147,21 @@ class TransactionList extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "₹ " + transaction[index].amount.toInt().toString(),
-                    style: Theme.of(context).textTheme.headline4,
+                  FittedBox(
+                    child: Text(
+                      "₹ " + transaction[index].amount.toInt().toString(),
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ),
                   Row(
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(transaction[index].title,
-                              style: Theme.of(context).textTheme.headline5),
+                          FittedBox(
+                            child: Text(transaction[index].title,
+                                style: Theme.of(context).textTheme.headline5),
+                          ),
                           Text(
                             DateFormat.yMMMEd().format(
                               DateTime.parse(transaction[index].date),

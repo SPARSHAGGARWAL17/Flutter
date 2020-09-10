@@ -8,6 +8,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   List<Transaction> _userTransaction = [];
+
   List<Transaction> get recentTransaction {
     return _userTransaction.where((tx) {
       return DateTime.parse(tx.date)
@@ -19,6 +20,7 @@ class _LandingPageState extends State<LandingPage> {
     setState(() {
       _userTransaction.add(tx);
       _userTransaction.sort((comp1, comp2) => comp1.date.compareTo(comp2.date));
+      print(recentTransaction);
     });
   }
 
@@ -53,6 +55,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addTransaction(context),
         child: Icon(Icons.add),
@@ -76,71 +79,52 @@ class _LandingPageState extends State<LandingPage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+          padding: EdgeInsets.all(5),
+          child: _userTransaction.isEmpty
+              ? SingleChildScrollView(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          "No Transaction Yet.",
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 80,
+                      ),
+                      Container(
+                        height: 300,
+                        child: Image.asset(
+                          "assets/images/waiting.png",
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: FractionallySizedBox(
-                        alignment: Alignment.bottomCenter,
-                        heightFactor: 0.6,
-                        child: Container(
-                          height: 60,
-                          width: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(width: 0.1),
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                      ),
+                    Expanded(
+                        flex: 1,
+                        child: Chart(recentTransaction: recentTransaction)),
+                    Text(
+                      "Transactions",
+                      style: Theme.of(context).textTheme.headline3,
                     ),
-                    Container(
-                      child: FractionallySizedBox(
-                        alignment: Alignment.bottomCenter,
-                        heightFactor: 0.8,
-                        child: Container(
-                          height: 60,
-                          width: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(width: 0.1),
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: FractionallySizedBox(
-                        alignment: Alignment.bottomCenter,
-                        heightFactor: 0.4,
-                        child: Container(
-                          height: 60,
-                          width: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(width: 0.1),
-                              borderRadius: BorderRadius.circular(30)),
-                        ),
+                    Expanded(
+                      flex: 2,
+                      child: TransactionList(
+                        transaction: _userTransaction,
+                        delete: deleteTransaction,
                       ),
                     ),
                   ],
                 ),
-              ),
-              Text(
-                "Transactions",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              TransactionList(
-                transaction: _userTransaction,
-                delete: deleteTransaction,
-              ),
-            ],
-          ),
         ),
       ),
     );
