@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meals_app/dummy_data.dart';
+import 'package:meals_app/export.dart';
 
 class CategoriesList extends StatefulWidget {
   @override
@@ -14,35 +14,25 @@ class _CategoriesListState extends State<CategoriesList> {
       child: GridView.builder(
         itemCount: DUMMY_CATEGORIES.length,
         itemBuilder: (_, int index) {
-          return InkWell(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'assets/images/${DUMMY_PICS[index]}.jpg',
-                      fit: BoxFit.cover,
-                    ),
+          return OpenContainer(
+              transitionDuration: Duration(milliseconds: 400),
+              tappable: true,
+              closedElevation: 0,
+              transitionType: ContainerTransitionType.fade,
+              closedBuilder: (context, actions) {
+                return InkWell(
+                  onTap: actions,
+                  child: GridCard(
+                    index: index,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      DUMMY_CATEGORIES[index].title,
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+                );
+              },
+              openBuilder: (context, actions) {
+                return MealPage(
+                  imageUrl: DUMMY_PICS[index],
+                  title: DUMMY_CATEGORIES[index].title,
+                );
+              });
         },
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
