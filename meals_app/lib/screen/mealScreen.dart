@@ -115,6 +115,27 @@ class _MealScreenState extends State<MealScreen> {
                       ),
                       SizedBox(height: 20),
                       Text(
+                        "Ingredients:",
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: meal.ingredients.map((text) {
+                            return LimitedBox(
+                              child: Text(
+                                '* $text',
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
                         "Steps:",
                         style: Theme.of(context).textTheme.headline3,
                       ),
