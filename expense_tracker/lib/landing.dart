@@ -2,11 +2,15 @@ import 'package:expense_tracker/export.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
+  final Function change;
+  final bool theme;
+  LandingPage({this.change, this.theme});
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
+  bool theme = false;
   List<Transaction> _userTransaction = [];
 
   List<Transaction> get recentTransaction {
@@ -46,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
             ),
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: Colors.blueGrey,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(30)),
           );
         });
@@ -67,14 +71,29 @@ class _LandingPageState extends State<LandingPage> {
         child: Padding(padding: EdgeInsets.all(20)),
       ),
       appBar: AppBar(
-        title: Text('Expense Tracker'),
+        elevation: 0,
+        title: Text(
+          'Expense Tracker',
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                _addTransaction(context);
-              })
+          Row(
+            children: [
+              Icon(
+                widget.theme ? Icons.wb_sunny : Icons.tonality,
+                color: Theme.of(context).colorScheme.primaryVariant,
+              ),
+              Switch(
+                  value: widget.theme,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.change(value);
+                    });
+                  }),
+            ],
+          ),
         ],
       ),
       body: SafeArea(

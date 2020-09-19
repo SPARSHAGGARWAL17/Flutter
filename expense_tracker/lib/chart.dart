@@ -52,7 +52,7 @@ class Chart extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.red,
                         borderRadius: BorderRadius.circular(20)),
                   ),
                   heightFactor: (value["amount"] as double) / totalSpend,
