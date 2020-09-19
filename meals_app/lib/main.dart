@@ -13,12 +13,15 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         accentColor: kAccentColor,
         textTheme: Theme.of(context).textTheme.copyWith(
-              bodyText1: TextStyle(
-                color: kTextColor,
-                fontSize: 30,
-                fontFamily: kTextFamily,
-              ),
+            bodyText1: TextStyle(
+              color: kTextColor,
+              fontSize: 30,
+              fontFamily: kTextFamily,
             ),
+            headline5: TextStyle(
+              color: kTextColor,
+              fontFamily: kTextFamily,
+            )),
       ),
       debugShowCheckedModeBanner: false,
       home: LandingPage(),

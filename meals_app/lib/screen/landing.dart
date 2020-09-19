@@ -8,12 +8,36 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  Map<String, bool> filters = {
+    "Vegan": false,
+    "Gluten": false,
+    "Vegetarian": false,
+    "Lactose": false,
+  };
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  size: 30,
+                ),
+                onPressed: () async {
+                  var f = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => FilterPage(
+                        filters: filters,
+                      ),
+                    ),
+                  );
+                  print(f);
+                })
+          ],
           toolbarHeight: MediaQuery.of(context).size.height * 0.2,
           title: Text(
             'Recipe',
@@ -37,7 +61,7 @@ class _LandingPageState extends State<LandingPage> {
         ),
         body: TabBarView(
           children: [
-            CategoriesList(),
+            CategoriesList(filter: filters),
             FavoritePage(),
           ],
         ),

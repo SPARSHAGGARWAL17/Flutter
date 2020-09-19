@@ -7,22 +7,35 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
-  List<Meal> favMeal;
-  @override
-  void initState() {
-    favMeal = DUMMY_MEALS.where((meal) => meal.isFav != true).toList();
-    super.initState();
+  void _addOrRemove() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemExtent: 350,
-        itemCount: favMeal.length,
-        itemBuilder: (_, int index) {
-          return ListBuilderWidget(
-            meal: favMeal[index],
+    return favoriteMeal.isNotEmpty
+        ? ListView.builder(
+            itemExtent: 350,
+            itemCount: favoriteMeal.length,
+            itemBuilder: (_, int index) {
+              return ListBuilderWidget(
+                onPressed: _addOrRemove,
+                meal: favoriteMeal[index],
+              );
+            })
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.star,
+                size: 80,
+                color: Colors.black12,
+              ),
+              Text(
+                'No Favorites Yet.',
+                style: TextStyle(fontSize: 30, color: Colors.black12),
+              )
+            ],
           );
-        });
   }
 }

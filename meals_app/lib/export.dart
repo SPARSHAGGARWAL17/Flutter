@@ -9,3 +9,5 @@ export 'package:animations/animations.dart';
 export 'widgets/grid.dart';
 export 'widgets/openContainer.dart';
 export 'widgets/listBuilder.dart';
+export 'screen/mealScreen.dart';
+export 'widgets/filter.dart';

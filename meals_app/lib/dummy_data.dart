@@ -14,6 +14,7 @@ const DUMMY_PICS = const [
   "french",
   "summer"
 ];
+List<Meal> favoriteMeal = [];
 
 const DUMMY_CATEGORIES = const [
   Category(

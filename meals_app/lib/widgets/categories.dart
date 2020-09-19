@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/export.dart';
 
 class CategoriesList extends StatefulWidget {
+  final filter;
+  CategoriesList({this.filter});
   @override
   _CategoriesListState createState() => _CategoriesListState();
 }
@@ -16,7 +18,6 @@ class _CategoriesListState extends State<CategoriesList> {
         itemBuilder: (_, int index) {
           return OpenContainer(
               transitionDuration: Duration(milliseconds: 400),
-              tappable: true,
               closedElevation: 0,
               transitionType: ContainerTransitionType.fade,
               closedBuilder: (context, actions) {
@@ -29,8 +30,10 @@ class _CategoriesListState extends State<CategoriesList> {
               },
               openBuilder: (context, actions) {
                 return MealPage(
+                  filter: widget.filter,
                   imageUrl: DUMMY_PICS[index],
                   title: DUMMY_CATEGORIES[index].title,
+                  categories: DUMMY_CATEGORIES[index].id,
                 );
               });
         },
