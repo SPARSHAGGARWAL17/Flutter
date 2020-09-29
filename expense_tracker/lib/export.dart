@@ -1,6 +1,10 @@
 export 'landing.dart';
 export 'package:intl/intl.dart';
-export 'model.dart';
-export 'new_transaction.dart';
-export 'chart.dart';
+export 'model/model.dart';
+export 'widget/new_transaction.dart';
+export 'widget/chart.dart';
 export 'package:provider/provider.dart';
+export 'widget/widget.dart';
+export 'model/model.dart';
+export 'model/theme.dart';
+export 'widget/transaction.dart';
