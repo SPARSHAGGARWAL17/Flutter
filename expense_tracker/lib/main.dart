@@ -2,34 +2,21 @@ import 'package:flutter/material.dart';
 import 'export.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => Transaction()),
+    ChangeNotifierProvider(create: (_) => ThemeChange()),
+  ], child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool theme = false;
-  void change(bool value) {
-    setState(() {
-      theme = value;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool theme = Provider.of<ThemeChange>(context).dark;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: theme ? themeLight : themeDark,
+      theme: !theme ? themeLight : themeDark,
       home: LandingPage(
-        change: change,
         theme: theme,
       ),
     );

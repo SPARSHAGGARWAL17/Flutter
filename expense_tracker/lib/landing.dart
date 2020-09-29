@@ -1,38 +1,9 @@
 import 'package:expense_tracker/export.dart';
 import 'package:flutter/material.dart';
 
-class LandingPage extends StatefulWidget {
-  final Function change;
+class LandingPage extends StatelessWidget {
   final bool theme;
-  LandingPage({this.change, this.theme});
-  @override
-  _LandingPageState createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  bool theme = false;
-  List<Transaction> _userTransaction = [];
-
-  List<Transaction> get recentTransaction {
-    return _userTransaction.where((tx) {
-      return DateTime.parse(tx.date)
-          .isAfter(DateTime.now().subtract(Duration(days: 7)));
-    }).toList();
-  }
-
-  void addTransaction(Transaction tx) {
-    setState(() {
-      _userTransaction.add(tx);
-      _userTransaction.sort((comp1, comp2) => comp1.date.compareTo(comp2.date));
-      print(recentTransaction);
-    });
-  }
-
-  void deleteTransaction(String id) {
-    setState(() {
-      _userTransaction.removeWhere((element) => element.id == id);
-    });
-  }
+  LandingPage({this.theme});
 
   void _addTransaction(BuildContext ctx) {
     showModalBottomSheet(
@@ -44,9 +15,7 @@ class _LandingPageState extends State<LandingPage> {
             height: 500,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: NewTransaction(
-                addTx: addTransaction,
-              ),
+              child: NewTransaction(),
             ),
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -58,6 +27,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Transaction> recentTransaction =
+        Provider.of<Transaction>(context).recentTransaction;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton(
@@ -76,21 +47,19 @@ class _LandingPageState extends State<LandingPage> {
           'Expense Tracker',
           style: Theme.of(context).textTheme.headline5,
         ),
-        backgroundColor: Theme.of(context).canvasColor,
         automaticallyImplyLeading: false,
         actions: [
           Row(
             children: [
               Icon(
-                widget.theme ? Icons.wb_sunny : Icons.tonality,
-                color: Theme.of(context).colorScheme.primaryVariant,
+                !theme ? Icons.wb_sunny : Icons.tonality,
+                color: Theme.of(context).iconTheme.color,
               ),
               Switch(
-                  value: widget.theme,
+                  value: theme,
                   onChanged: (value) {
-                    setState(() {
-                      widget.change(value);
-                    });
+                    Provider.of<ThemeChange>(context, listen: false)
+                        .changeTheme();
                   }),
             ],
           ),
@@ -99,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(5),
-          child: _userTransaction.isEmpty
+          child: Provider.of<Transaction>(context).user.isEmpty
               ? SingleChildScrollView(
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
@@ -138,8 +107,7 @@ class _LandingPageState extends State<LandingPage> {
                     Expanded(
                       flex: 2,
                       child: TransactionList(
-                        transaction: _userTransaction,
-                        delete: deleteTransaction,
+                        transaction: Provider.of<Transaction>(context).user,
                       ),
                     ),
                   ],

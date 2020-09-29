@@ -1,10 +1,7 @@
 import 'export.dart';
-
 import 'package:flutter/material.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function addTx;
-  NewTransaction({this.addTx});
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
@@ -32,25 +29,6 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    void addTxn() {
-      if (amountController.text == null) {
-        return;
-      }
-      if (_selectedDate != null &&
-          amountController.text != null &&
-          titleController.text != null) {
-        setState(() {
-          Transaction newTx = Transaction(
-              amount: double.parse(amountController.text),
-              title: titleController.text,
-              date: _selectedDate.toString(),
-              id: DateTime.now().toString());
-          widget.addTx(newTx);
-        });
-        Navigator.of(context).pop();
-      }
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -74,52 +52,24 @@ class _NewTransactionState extends State<NewTransaction> {
           ],
         ),
         SizedBox(height: 20),
-        TextField(
-          controller: titleController,
-          autofocus: true,
-          decoration: InputDecoration(
-              labelText: "Title",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
-          onSubmitted: (value) {},
-        ),
+        TField(controller: titleController),
         SizedBox(height: 20),
-        TextField(
-          controller: amountController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-              labelText: "Amount",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
-          onSubmitted: (value) {},
-        ),
+        TField(controller: amountController),
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            RaisedButton(
+            RButton(
+              title: 'Cancel',
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            RButton(
               onPressed: () {
+                Provider.of<Transaction>(context, listen: false).addTxn(
+                    amountController.text, titleController.text, _selectedDate);
                 Navigator.of(context).pop();
               },
-              child: Text(
-                "Cancel",
-                style: Theme.of(context).textTheme.button,
-              ),
-              shape: StadiumBorder(),
-              color: Colors.red,
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            ),
-            RaisedButton(
-              onPressed: () {
-                addTxn();
-              },
-              child: Text(
-                "Save",
-                style: Theme.of(context).textTheme.button,
-              ),
-              shape: StadiumBorder(),
-              color: Colors.green,
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              title: "Save",
             ),
           ],
         )
@@ -128,17 +78,64 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 }
 
+class TField extends StatelessWidget {
+  TField({
+    @required this.controller,
+  });
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      autofocus: true,
+      decoration: InputDecoration(
+          labelText: "Title",
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor))),
+      onSubmitted: (value) {
+        controller.text = value;
+      },
+    );
+  }
+}
+
+class RButton extends StatelessWidget {
+  final String title;
+  final Function onPressed;
+  RButton({
+    this.title,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: onPressed,
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.button,
+      ),
+      shape: StadiumBorder(),
+      color: title == 'Cancel' ? Colors.red : Colors.green,
+      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+    );
+  }
+}
+
 // ignore: must_be_immutable
 class TransactionList extends StatelessWidget {
   List<Transaction> transaction;
-  Function delete;
-  TransactionList({this.transaction, this.delete});
+  TransactionList({this.transaction});
   @override
   Widget build(BuildContext context) {
+    List<Transaction> data = Provider.of<Transaction>(context).user;
     return Container(
       height: 300,
       child: ListView.builder(
-        itemCount: transaction.length,
+        itemCount: data.length,
         itemBuilder: (context, int index) {
           return Card(
             margin: EdgeInsets.all(10),
@@ -149,7 +146,7 @@ class TransactionList extends StatelessWidget {
                 children: [
                   FittedBox(
                     child: Text(
-                      "₹ " + transaction[index].amount.toInt().toString(),
+                      "₹ " + data[index].amount.toInt().toString(),
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
@@ -159,12 +156,12 @@ class TransactionList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FittedBox(
-                            child: Text(transaction[index].title,
+                            child: Text(data[index].title,
                                 style: Theme.of(context).textTheme.headline5),
                           ),
                           Text(
                             DateFormat.yMMMEd().format(
-                              DateTime.parse(transaction[index].date),
+                              DateTime.parse(data[index].date),
                             ),
                           ),
                         ],
@@ -175,7 +172,8 @@ class TransactionList extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          delete(transaction[index].id);
+                          Provider.of<Transaction>(context)
+                              .deleteTransaction(data[index].id);
                         },
                       )
                     ],

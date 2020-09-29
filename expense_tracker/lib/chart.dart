@@ -28,7 +28,7 @@ class Chart extends StatelessWidget {
 
   double get totalSpend {
     return grouped.fold(
-        0.0, (sum, element) => sum + (element["amount"] as double));
+        0, (sum, element) => sum + (element["amount"] as double));
   }
 
   @override
