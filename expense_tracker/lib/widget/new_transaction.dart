@@ -1,5 +1,6 @@
 import '../export.dart';
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/model/sql.dart';
 
 class NewTransaction extends StatefulWidget {
   @override
@@ -67,10 +68,14 @@ class _NewTransactionState extends State<NewTransaction> {
           children: [
             RButton(
               title: 'Cancel',
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () async {
+                final db = await DBHelper.getData('transactions');
+                print(db);
+                Navigator.of(context).pop();
+              },
             ),
             RButton(
-              onPressed: () {
+              onPressed: () async {
                 Provider.of<Transaction>(context, listen: false).addTxn(
                     amountController.text, titleController.text, _selectedDate);
                 Navigator.of(context).pop();

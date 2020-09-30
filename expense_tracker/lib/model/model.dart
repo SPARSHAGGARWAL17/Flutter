@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sql.dart';
 
 class ThemeChange with ChangeNotifier {
   bool _darkTheme = false;
@@ -19,24 +20,39 @@ class Transaction with ChangeNotifier {
   double amount;
   Transaction({this.amount, this.date, this.id, this.title});
 
-  void addTxn(String amount, String title, DateTime date) {
-    Transaction newTx;
-    if (date != null && amount != null && title != null) {
-      newTx = Transaction(
-        amount: double.parse(amount),
-        title: title,
-        date: date.toString(),
-        id: DateTime.now().toString(),
-      );
-      _user.add(newTx);
+  void addTxn(String amount, String title, DateTime date) async {
+    Map<String, Object> newTx;
+    if (date != null && amount != '' && title != '') {
+      newTx = {
+        'amount': double.parse(amount),
+        'title': title,
+        'date': date.toString(),
+        'id': DateTime.now().toString(),
+      };
+      DBHelper.insert('transactions', newTx);
+
       notifyListeners();
     } else {
       return;
     }
   }
 
+  void loadData() async {
+    final List<Map<String, Object>> data =
+        await DBHelper.getData('transactions');
+    _user = data
+        .map((single) => Transaction(
+            amount: single['amount'],
+            title: single['title'],
+            date: single['date'],
+            id: single['id']))
+        .toList();
+    notifyListeners();
+  }
+
   List<Transaction> _user = [];
   List<Transaction> get user {
+    loadData();
     return [..._user];
   }
 
@@ -48,7 +64,7 @@ class Transaction with ChangeNotifier {
   }
 
   void deleteTransaction(Transaction transaction) {
-    _user.remove(transaction);
+    DBHelper.delete(transaction.id);
     notifyListeners();
   }
 }

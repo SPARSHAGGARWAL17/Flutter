@@ -16,7 +16,7 @@ class Chart extends StatelessWidget {
         if (weekday.day == DateTime.parse(recentTransaction[i].date).day &&
             weekday.month == DateTime.parse(recentTransaction[i].date).month &&
             weekday.year == DateTime.parse(recentTransaction[i].date).year) {
-          totalSum += recentTransaction[i].amount.toDouble();
+          totalSum += recentTransaction[i].amount;
         }
       }
       return {

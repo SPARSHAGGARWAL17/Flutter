@@ -10,7 +10,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-  @override
   Widget build(BuildContext context) {
     bool theme = Provider.of<ThemeChange>(context).dark;
     return MaterialApp(
