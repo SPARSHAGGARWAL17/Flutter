@@ -45,17 +45,19 @@ class Chart extends StatelessWidget {
                 child: Text("₹ ${value["amount"].toString()}"),
               ),
               SizedBox(height: 5),
-              Container(
-                height: 90,
-                width: 15,
-                child: FractionallySizedBox(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20)),
+              Expanded(
+                child: Container(
+                  height: 90,
+                  width: 15,
+                  child: FractionallySizedBox(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                    heightFactor: (value["amount"] as double) / totalSpend,
                   ),
-                  heightFactor: (value["amount"] as double) / totalSpend,
                 ),
               ),
               SizedBox(height: 5),

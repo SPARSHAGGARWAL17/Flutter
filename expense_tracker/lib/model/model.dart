@@ -47,6 +47,8 @@ class Transaction with ChangeNotifier {
             date: single['date'],
             id: single['id']))
         .toList();
+    _user.sort((comp1, comp2) =>
+        DateTime.parse(comp1.date).compareTo(DateTime.parse(comp2.date)));
     notifyListeners();
   }
 
