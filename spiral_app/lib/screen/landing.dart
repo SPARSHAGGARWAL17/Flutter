@@ -8,6 +8,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  List<String> routes = [
+    LandingPage.LandingRoute,
+    FilterPage.Route,
+    LandingPage.LandingRoute,
+  ];
   int current = 0;
   var mobileCard = mobiles.sublist(0, 3);
   @override
@@ -16,9 +21,14 @@ class _LandingPageState extends State<LandingPage> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
         currentIndex: current,
-        onTap: (value) {
+        onTap: (value) async {
           setState(() {
             current = value;
+          });
+          var data = await Navigator.of(context).pushNamed(routes[value]);
+          print(data);
+          setState(() {
+            current = 0;
           });
         },
         selectedItemColor: kPrimaryColor,

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         LoginPage.Route: (context) => LoginPage(),
         FilterPage.Route: (context) => FilterPage(),
       },
-      initialRoute: FilterPage.Route,
+      initialRoute: LandingPage.LandingRoute,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black,
         primaryColor: kPrimaryColor,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: Colors.black),
         buttonTheme: ButtonThemeData(
           shape: const StadiumBorder(),
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
           buttonColor: kPrimaryColor,
         ),
       ),
