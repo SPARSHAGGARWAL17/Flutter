@@ -39,7 +39,8 @@ class CompareWidget extends StatelessWidget {
                             padding: EdgeInsets.all(20),
                             child: Text(
                               _card[i].name,
-                              style: TextStyle(color: Colors.black),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 15),
                             ),
                           ),
                         ),

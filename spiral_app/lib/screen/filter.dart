@@ -15,13 +15,14 @@ class FilterPage extends StatelessWidget {
             backgroundColor: Colors.grey[800],
             actions: [
               FlatButton(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(color: kPrimaryColor, fontSize: 15),
-                  ),
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                  })
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: kPrimaryColor, fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
             ],
           );
         },
@@ -57,7 +58,8 @@ class FilterPage extends StatelessWidget {
                   options: filters[keys[i]],
                 ),
               Center(
-                child: RaisedButton(
+                child: RaisedButton.icon(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   onPressed: () {
                     bool empty = false;
                     for (var i = 0; i < result.length; i++) {
@@ -71,7 +73,8 @@ class FilterPage extends StatelessWidget {
                     else
                       dialogue(context);
                   },
-                  child: Text(
+                  icon: Icon(Icons.search_rounded),
+                  label: Text(
                     'Find',
                     style: Theme.of(context).textTheme.headline6,
                   ),

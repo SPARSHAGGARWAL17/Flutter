@@ -17,6 +17,7 @@ class _LandingPageState extends State<LandingPage> {
   List<Mobile> mobileCard = mobiles.sublist(0, 3);
   @override
   Widget build(BuildContext context) {
+    final _mob = Provider.of<Mobile>(context).comparePhone;
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
@@ -25,8 +26,10 @@ class _LandingPageState extends State<LandingPage> {
           setState(() {
             current = value;
           });
-          var data = await Navigator.of(context).pushNamed(routes[value]);
-          print(data);
+          if (current != 0) {
+            var data = await Navigator.of(context).pushNamed(routes[value]);
+            print(data);
+          }
           setState(() {
             current = 0;
           });
@@ -48,11 +51,72 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ],
       ),
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {},
+      drawer: Drawer(
+        elevation: 10,
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+              ),
+              padding: EdgeInsets.zero,
+              child: Container(
+                padding: EdgeInsets.all(20),
+                alignment: Alignment.bottomLeft,
+                width: double.infinity,
+                child: Text(
+                  'Recsy',
+                  style: TextStyle(fontSize: 40),
+                ),
+                color: kPrimaryColor,
+              ),
+            ),
+            Container(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: kPrimaryColor,
+                      foregroundColor: Colors.white,
+                      child: Text('V/S'),
+                    ),
+                    title: Text('Compare'),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(SearchPage.Route,
+                          arguments: {'mobiles': _mob, 'selected': 0});
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    endIndent: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.supervisor_account_rounded,
+                      size: 40,
+                      color: kPrimaryColor,
+                    ),
+                    title: Text('About Us'),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    endIndent: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.mail,
+                      size: 40,
+                      color: kPrimaryColor,
+                    ),
+                    title: Text('Contact Us'),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
+      ),
+      appBar: AppBar(
         title: Text(
           'Recsy',
           style: TextStyle(
