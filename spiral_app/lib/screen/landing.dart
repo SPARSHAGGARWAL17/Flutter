@@ -14,7 +14,7 @@ class _LandingPageState extends State<LandingPage> {
     LandingPage.LandingRoute,
   ];
   int current = 0;
-  var mobileCard = mobiles.sublist(0, 3);
+  List<Mobile> mobileCard = mobiles.sublist(0, 3);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,19 +70,23 @@ class _LandingPageState extends State<LandingPage> {
             SectionItem(
               title: 'You May Also Like',
               list: mobileCard,
+              displayText: true,
             ),
             CompareWidget(),
             SectionItem(
               title: 'Top Performing',
               list: mobileCard,
+              displayText: true,
             ),
             SectionItem(
               title: 'Top Camera',
               list: mobiles.sublist(4, 7),
+              displayText: true,
             ),
             SectionItem(
               title: 'Top Rated',
               list: mobiles.sublist(5, 8),
+              displayText: true,
             ),
           ],
         ),

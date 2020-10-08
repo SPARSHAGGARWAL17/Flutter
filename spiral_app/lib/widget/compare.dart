@@ -4,7 +4,7 @@ import 'package:spiral_app/export.dart';
 class CompareWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _card = mobiles;
+    final _card = Provider.of<Mobile>(context).comparePhone;
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -22,19 +22,25 @@ class CompareWidget extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Container(
-                height: 70,
+                height: 90,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     for (var i = 0; i < 2; i++)
-                      LimitedBox(
-                        maxWidth: 95,
-                        child: Container(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            _card[i].name,
-                            style: TextStyle(color: Colors.black),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(SearchPage.Route,
+                              arguments: {'mobiles': _card, 'selected': i});
+                        },
+                        child: LimitedBox(
+                          maxWidth: 120,
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              _card[i].name,
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
                       ),
@@ -48,7 +54,8 @@ class CompareWidget extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(SearchPage.Route);
+                  Navigator.of(context).pushNamed(CompareScreen.Route,
+                      arguments: {'mobiles': _card});
                 },
                 child: CircleAvatar(
                   child: Text(

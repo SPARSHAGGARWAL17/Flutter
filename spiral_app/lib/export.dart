@@ -9,3 +9,4 @@ export 'widget/compare.dart';
 export 'screen/search.dart';
 export 'screen/login_sign.dart';
 export 'package:spiral_app/screen/filter.dart';
+export 'screen/compare_screen.dart';

@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         SearchPage.Route: (context) => SearchPage(),
         LoginPage.Route: (context) => LoginPage(),
         FilterPage.Route: (context) => FilterPage(),
+        CompareScreen.Route: (context) => CompareScreen(),
       },
       initialRoute: LandingPage.LandingRoute,
       theme: ThemeData.dark().copyWith(

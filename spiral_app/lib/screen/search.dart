@@ -12,19 +12,35 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController search = TextEditingController();
   String _compare = '';
   int _selected = 0;
+  bool init = true;
+  List<Mobile> _mobile;
+  int _index = 0;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('did change ');
+    final Map args = ModalRoute.of(context).settings.arguments;
+    if (init) {
+      _mobile = [...args['mobiles']];
+      _index = args['selected'];
+      init = false;
+    }
+    _selected = _index;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var compare = Provider.of<Mobile>(context).compareList;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70,
         backgroundColor: kPrimaryColor,
         actions: [
           IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                Navigator.of(context).pop();
-              })
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ],
         automaticallyImplyLeading: false,
         leading: Icon(Icons.search),
@@ -48,7 +64,7 @@ class _SearchPageState extends State<SearchPage> {
                 return Container(
                   margin: EdgeInsets.all(10),
                   child: Text(
-                    'Select Phone ${_selected <= 1 ? _selected + 1 : 2}',
+                    'Select ${_selected + 1 == 1 ? 'First' : 'Second'} Phone',
                     style: bodyText(context),
                   ),
                 );
@@ -56,19 +72,28 @@ class _SearchPageState extends State<SearchPage> {
                 if (mobiles[index - 1].name.toLowerCase().contains(_compare)) {
                   return ListTile(
                     onTap: () {
+                      _mobile.removeAt(_selected);
+                      _mobile.insert(_selected, mobiles[index - 1]);
                       setState(() {
-                        _selected++;
-                        compare.add(mobiles[index - 1]);
-                        print(compare.length);
+                        _index++;
+                        if (_selected < 1) {
+                          print('here');
+                          _selected++;
+                          print(_selected);
+                        }
+                        if (_index > 1) {
+                          Navigator.of(context).pushReplacementNamed(
+                              CompareScreen.Route,
+                              arguments: {'mobiles': _mobile});
+                        }
                       });
-                      if (_selected == 2) {
-                        print('All done!');
-                      }
                     },
-                    title: Text(mobiles[index - 1].name,
-                        style: TextStyle(
-                          fontSize: 20,
-                        )),
+                    title: Text(
+                      mobiles[index - 1].name,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
                   );
                 } else {
                   return Container();
