@@ -13,16 +13,16 @@ class _SearchPageState extends State<SearchPage> {
   String _compare = '';
   int _selected = 0;
   bool init = true;
-  List<Mobile> _mobile;
   int _index = 0;
+  bool _select;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     print('did change ');
     final Map args = ModalRoute.of(context).settings.arguments;
     if (init) {
-      _mobile = [...args['mobiles']];
       _index = args['selected'];
+      _select = args['compare'];
       init = false;
     }
     _selected = _index;
@@ -72,21 +72,20 @@ class _SearchPageState extends State<SearchPage> {
                 if (mobiles[index - 1].name.toLowerCase().contains(_compare)) {
                   return ListTile(
                     onTap: () {
-                      _mobile.removeAt(_selected);
-                      _mobile.insert(_selected, mobiles[index - 1]);
-                      setState(() {
-                        _index++;
-                        if (_selected < 1) {
-                          print('here');
+                      Provider.of<Mobile>(context, listen: false)
+                          .randomCompare(_selected, mobiles[index - 1]);
+                      if (_select && _selected != 2) {
+                        setState(() {
                           _selected++;
-                          print(_selected);
-                        }
-                        if (_index > 1) {
-                          Navigator.of(context).pushReplacementNamed(
-                              CompareScreen.Route,
-                              arguments: {'mobiles': _mobile});
-                        }
-                      });
+                        });
+                      } else if (_selected == 2)
+                        Navigator.of(context)
+                            .pushNamed(CompareScreen.Route, arguments: {
+                          'mobiles': Provider.of<Mobile>(context, listen: false)
+                              .comparePhone
+                        });
+                      else
+                        Navigator.of(context).pop();
                     },
                     title: Text(
                       mobiles[index - 1].name,

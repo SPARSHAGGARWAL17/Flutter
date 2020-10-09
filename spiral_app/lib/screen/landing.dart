@@ -25,8 +25,10 @@ class _LandingPageState extends State<LandingPage> {
           setState(() {
             current = value;
           });
-          var data = await Navigator.of(context).pushNamed(routes[value]);
-          print(data);
+          if (current != 0) {
+            var data = await Navigator.of(context).pushNamed(routes[value]);
+            print(data);
+          }
           setState(() {
             current = 0;
           });
