@@ -34,7 +34,7 @@ class CompareWidget extends StatelessWidget {
                               arguments: {'mobiles': _card, 'selected': i});
                         },
                         child: LimitedBox(
-                          maxWidth: 120,
+                          maxWidth: 110,
                           child: Container(
                             padding: EdgeInsets.all(20),
                             child: Text(
