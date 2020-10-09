@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spiral_app/const.dart';
+import 'package:spiral_app/export.dart';
 import '../widget/log_wid.dart';
 
 class LoginPage extends StatelessWidget {
@@ -29,11 +30,18 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                Center(child: Buttons('Login')),
+                Center(
+                    child: RaisedButton(
+                  child: Text('Login'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(LandingPage.LandingRoute);
+                  },
+                )),
                 Center(
                   child: FlatButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Sign()),
                       );

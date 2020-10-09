@@ -61,9 +61,6 @@ class Mobile with ChangeNotifier {
   void randomCompare(int selected, Mobile mobile) {
     _compare.removeAt(selected);
     _compare.insert(selected, mobile);
-    for (var i in _compare) {
-      print(i.name);
-    }
     notifyListeners();
   }
 }

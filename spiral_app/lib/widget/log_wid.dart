@@ -12,6 +12,7 @@ class TextWidget extends StatelessWidget {
         showCursor: true,
         decoration: InputDecoration(
           hintText: labelText,
+          contentPadding: EdgeInsets.only(left: 20),
           filled: true,
           fillColor: secondContainer,
           labelStyle: TextStyle(
@@ -45,26 +46,6 @@ class Texts extends StatelessWidget {
         text,
         style:
             Theme.of(context).textTheme.headline3.copyWith(color: Colors.white),
-      ),
-    );
-  }
-}
-
-class Buttons extends StatelessWidget {
-  final String text;
-  Buttons(this.text);
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: StadiumBorder(),
-      color: Color(0xffFfaa00),
-      onPressed: () {
-        Navigator.of(context).pushReplacementNamed(LandingPage.LandingRoute);
-      },
-      textColor: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-      child: Container(
-        child: Text(text),
       ),
     );
   }
@@ -111,7 +92,13 @@ class Sign extends StatelessWidget {
                 TextWidget('Username'),
                 TextWidget('Password'),
                 SizedBox(height: 20),
-                Buttons('Sign Up'),
+                RaisedButton(
+                  child: Text('Sign Up'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(LandingPage.LandingRoute);
+                  },
+                ),
               ],
             ),
           ),

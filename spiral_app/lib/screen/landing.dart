@@ -53,67 +53,74 @@ class _LandingPageState extends State<LandingPage> {
       ),
       drawer: Drawer(
         elevation: 10,
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-              ),
-              padding: EdgeInsets.zero,
-              child: Container(
-                padding: EdgeInsets.all(20),
-                alignment: Alignment.bottomLeft,
-                width: double.infinity,
-                child: Text(
-                  'Recsy',
-                  style: TextStyle(fontSize: 40),
+        child: Container(
+          color: Colors.black,
+          child: Column(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
                 ),
-                color: kPrimaryColor,
+                padding: EdgeInsets.zero,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  alignment: Alignment.bottomLeft,
+                  width: double.infinity,
+                  child: Text(
+                    'Recsy',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                  color: kPrimaryColor,
+                ),
               ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: kPrimaryColor,
-                      foregroundColor: Colors.white,
-                      child: Text('V/S'),
+              Container(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: kPrimaryColor,
+                        foregroundColor: Colors.white,
+                        child: Text('V/S'),
+                      ),
+                      title: Text('Compare'),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(SearchPage.Route,
+                            arguments: {
+                              'mobiles': _mob,
+                              'selected': 0,
+                              'compare': true
+                            });
+                      },
                     ),
-                    title: Text('Compare'),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(SearchPage.Route,
-                          arguments: {'mobiles': _mob, 'selected': 0});
-                    },
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    endIndent: 30,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.supervisor_account_rounded,
-                      size: 40,
-                      color: kPrimaryColor,
+                    Divider(
+                      color: Colors.grey,
+                      endIndent: 30,
                     ),
-                    title: Text('About Us'),
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    endIndent: 30,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.mail,
-                      size: 40,
-                      color: kPrimaryColor,
+                    ListTile(
+                      leading: Icon(
+                        Icons.supervisor_account_rounded,
+                        size: 40,
+                        color: kPrimaryColor,
+                      ),
+                      title: Text('About Us'),
                     ),
-                    title: Text('Contact Us'),
-                  ),
-                ],
-              ),
-            )
-          ],
+                    Divider(
+                      color: Colors.grey,
+                      endIndent: 30,
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.mail,
+                        size: 40,
+                        color: kPrimaryColor,
+                      ),
+                      title: Text('Contact Us'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       appBar: AppBar(

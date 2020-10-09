@@ -18,7 +18,6 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('did change ');
     final Map args = ModalRoute.of(context).settings.arguments;
     if (init) {
       _index = args['selected'];
@@ -78,14 +77,16 @@ class _SearchPageState extends State<SearchPage> {
                         setState(() {
                           _selected++;
                         });
-                      } else if (_selected == 2)
-                        Navigator.of(context)
-                            .pushNamed(CompareScreen.Route, arguments: {
-                          'mobiles': Provider.of<Mobile>(context, listen: false)
-                              .comparePhone
-                        });
-                      else
+                      } else
                         Navigator.of(context).pop();
+                      if (_selected == 2)
+                        Navigator.of(context).pushReplacementNamed(
+                            CompareScreen.Route,
+                            arguments: {
+                              'mobiles':
+                                  Provider.of<Mobile>(context, listen: false)
+                                      .comparePhone
+                            });
                     },
                     title: Text(
                       mobiles[index - 1].name,
