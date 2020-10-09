@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:spiral_app/export.dart';
 
@@ -52,19 +50,20 @@ class Mobile with ChangeNotifier {
     'Display': [],
     'Charging': [],
   };
-  List<Mobile> _compareList = [];
+  List<Mobile> _compare = [];
   List<Mobile> get comparePhone {
-    mobiles.shuffle();
-    return [...mobiles.sublist(0, 2)];
+    for (var i in mobiles.sublist(0, 2)) {
+      _compare.add(i);
+    }
+    return [..._compare];
   }
 
-  void randomCompare() {
-    int val = Random().nextInt(mobiles.length);
-    bool added = false;
-    while (added) {
-      print("running");
-      if (!_compareList.contains(mobiles[val])) _compareList.add(mobiles[val]);
-      if (_compareList.length == 2) added = false;
+  void randomCompare(int selected, Mobile mobile) {
+    _compare.removeAt(selected);
+    _compare.insert(selected, mobile);
+    for (var i in _compare) {
+      print(i.name);
     }
+    notifyListeners();
   }
 }

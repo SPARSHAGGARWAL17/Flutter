@@ -31,7 +31,11 @@ class CompareWidget extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed(SearchPage.Route,
-                              arguments: {'mobiles': _card, 'selected': i});
+                              arguments: {
+                                'mobiles': _card,
+                                'selected': i,
+                                'compare': false
+                              });
                         },
                         child: LimitedBox(
                           maxWidth: 110,
